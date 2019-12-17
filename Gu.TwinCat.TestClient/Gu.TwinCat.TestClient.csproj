@@ -1,21 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
-    <Authors>Johan Larsson</Authors>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Description>Wrapper for Beckhoff TwinCAT PLC communication</Description>
-    <PackageReleaseNotes>
-      Initial
-    </PackageReleaseNotes>
-  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gu.TwinCat\Gu.TwinCat.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="4.3.10" />

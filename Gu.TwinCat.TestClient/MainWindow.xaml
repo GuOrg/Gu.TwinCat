@@ -1,0 +1,194 @@
+﻿<Window
+    x:Class="Gu.TwinCat.TestClient.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Window.DataContext>
+        <local:ViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="NetId:" />
+
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="1"
+                MinWidth="100"
+                Text="{Binding NetId}" />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="3"
+                Text="Port:" />
+
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="4"
+                MinWidth="30"
+                Text="{Binding Port}" />
+
+            <Button
+                Grid.Row="0"
+                Grid.Column="5"
+                Command="{Binding ConnectCommand}"
+                Content="Connect" />
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="6"
+                Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected {0}'}" />
+        </Grid>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Read Write">
+                <UniformGrid Rows="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Symbol" />
+
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding ReadSymbol.Name}" />
+
+                        <ComboBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            ItemsSource="{Binding ReadSymbol.Types}"
+                            SelectedItem="{Binding ReadSymbol.Type}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Value" />
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Command="{Binding ReadCommand}"
+                            Content="Read" />
+
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            IsReadOnly="True"
+                            IsReadOnlyCaretVisible="True"
+                            Text="{Binding ReadValue}" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Symbol" />
+
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding WriteSymbol.Name}" />
+
+                        <ComboBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            ItemsSource="{Binding WriteSymbol.Types}"
+                            SelectedItem="{Binding WriteSymbol.Type}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Value" />
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Command="{Binding WriteCommand}"
+                            Content="Write" />
+
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            IsReadOnly="True"
+                            IsReadOnlyCaretVisible="True"
+                            Text="{Binding WriteValue}" />
+                    </Grid>
+                </UniformGrid>
+            </TabItem>
+
+            <TabItem Header="Exceptions">
+                <UniformGrid Rows="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <ListBox Name="ExceptionsListBox" ItemsSource="{Binding Exceptions}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type system:Exception}">
+                                <TextBlock Text="{Binding Message}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                        <Button Content="Clear" Command="{Binding ClearExceptionsCommand}"></Button>
+                    </Grid>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message}" />
+                        <TextBox Grid.Row="1" Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.StackTrace}" />
+                    </Grid>
+                </UniformGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

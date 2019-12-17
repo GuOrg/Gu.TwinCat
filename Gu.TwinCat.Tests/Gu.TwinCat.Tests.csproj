@@ -1,8 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+    <Nullable>Enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gu.TwinCat\Gu.TwinCat.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Gu.Analyzers" Version="1.6.6.6-dev" PrivateAssets="all" />
