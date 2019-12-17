@@ -3,17 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.TwinCat", "Gu.TwinCat\Gu.TwinCat.csproj", "{DD0C001D-806D-4ABF-ADFD-FDBD6CC52D87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.TwinCat", "Gu.TwinCat\Gu.TwinCat.csproj", "{DD0C001D-806D-4ABF-ADFD-FDBD6CC52D87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.TwinCat.Tests", "Gu.TwinCat.Tests\Gu.TwinCat.Tests.csproj", "{56E06642-1A37-43FA-A7F5-B4200FDEB9CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.TwinCat.Tests", "Gu.TwinCat.Tests\Gu.TwinCat.Tests.csproj", "{56E06642-1A37-43FA-A7F5-B4200FDEB9CC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45490AFD-97C9-4F7D-8429-74E93E3857B6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{45490AFD-97C9-4F7D-8429-74E93E3857B6}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.TwinCat.TestClient", "Gu.TwinCat.TestClient\Gu.TwinCat.TestClient.csproj", "{F5F05BAC-8CCB-4704-A760-7D23CD91AAB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.TwinCat.TestClient", "Gu.TwinCat.TestClient\Gu.TwinCat.TestClient.csproj", "{F5F05BAC-8CCB-4704-A760-7D23CD91AAB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{CAAE6D9B-7E89-407F-A134-B9A290F708BD}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
