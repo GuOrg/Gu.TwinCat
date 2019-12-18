@@ -3,7 +3,7 @@
     /// <summary>
     /// Factory methods for <see cref="ReadFromAdsSymbol{TPlc,TCsharp}"/>.
     /// </summary>
-    public static class ReadFromAdsSymbol
+    public static partial class ReadFromAdsSymbol
     {
         /// <summary>
         /// The start of the address space. Can be used for health check.

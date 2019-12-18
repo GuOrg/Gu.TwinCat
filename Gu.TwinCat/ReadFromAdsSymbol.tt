@@ -1,0 +1,69 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".generated.cs" #>
+namespace Gu.TwinCat
+{
+    using System;
+
+    /// <summary>
+    /// Factory methods for <see cref="ReadFromAdsSymbol{TPlc,TCsharp}"/>.
+    /// </summary>
+    public static partial class ReadFromAdsSymbol
+    {
+<#
+    foreach (var type in new[]{ "Boolean", "Byte", "Char", "Double", "Int16", "Int32", "Int64", "SByte", "Single", "UInt16", "UInt32", "UInt64", "String"})
+    {
+#>
+        /// <summary>
+        /// Creates a new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, <#= type #>}"/> struct.
+        /// </summary>
+        /// <param name="name">The symbol name.</param>
+        /// <param name="isActive">Specifies if the symbol is currently active.</param>
+        /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, <#= type #>}"/> struct.</returns>
+        public static ReadFromAdsSymbol<<#= type #>, <#= type #>> <#= type #>(string name, bool isActive = true)
+        {
+            return new ReadFromAdsSymbol<<#= type #>, <#= type #>>(name, x => x, isActive);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, <#= type #>}"/> struct.
+        /// </summary>
+        /// <param name="name">The symbol name.</param>
+        /// <param name="isActive">Specifies if the symbol is currently active.</param>
+        /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, <#= type #>}"/> struct.</returns>
+        public static ReadFromAdsSymbol<<#= type #>[], <#= type #>[]> <#= type #>Array(string name, bool isActive = true)
+        {
+            return new ReadFromAdsSymbol<<#= type #>[], <#= type #>[]>(name, x => x, isActive);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, TCsharp}"/> struct.
+        /// </summary>
+        /// <typeparam name="TCsharp">The c# type.</typeparam>
+        /// <param name="name">The symbol name.</param>
+        /// <param name="map">The mapping ex x => Length.FromMillimetres(x).</param>
+        /// <param name="isActive">Specifies if the symbol is currently active.</param>
+        /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, TCsharp}"/> struct.</returns>
+        public static ReadFromAdsSymbol<<#= type #>, TCsharp> Create<TCsharp>(string name, Func<<#= type #>, TCsharp> map, bool isActive = true)
+        {
+            return new ReadFromAdsSymbol<<#= type #>, TCsharp>(name, map, isActive);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>[], TCsharp}"/> struct.
+        /// </summary>
+        /// <typeparam name="TCsharp">The c# type.</typeparam>
+        /// <param name="name">The symbol name.</param>
+        /// <param name="map">The mapping ex x => Length.FromMillimetres(x).</param>
+        /// <param name="isActive">Specifies if the symbol is currently active.</param>
+        /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>[], TCsharp}"/> struct.</returns>
+        public static ReadFromAdsSymbol<<#= type #>[], TCsharp> Create<TCsharp>(string name, Func<<#= type #>[], TCsharp> map, bool isActive = true)
+        {
+            return new ReadFromAdsSymbol<<#= type #>[], TCsharp>(name, map, isActive);
+        }
+
+<#
+    }
+#>
+    }
+}

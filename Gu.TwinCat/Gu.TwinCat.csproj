@@ -19,11 +19,27 @@
 
   <ItemGroup>
     <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="4.3.10" />
+    <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" Version="1.0.0-beta.59" PrivateAssets="all" />
     <PackageReference Include="Gu.Analyzers" Version="1.6.6.6-dev" PrivateAssets="all" />
     <PackageReference Include="IDisposableAnalyzers" Version="3.2.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
     <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.6" PrivateAssets="all" />
     <PackageReference Include="ReflectionAnalyzers" Version="0.1.21-dev" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+
+    <None Update="ReadFromAdsSymbol.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ReadFromAdsSymbol.generated.cs</LastGenOutput>
+    </None>
+
+    <Compile Update="ReadFromAdsSymbol.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReadFromAdsSymbol.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
