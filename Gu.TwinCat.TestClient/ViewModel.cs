@@ -17,8 +17,13 @@
         public ViewModel()
         {
             this.ConnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Connect(this.netId!, this.port)));
-            this.ReadCommand = new RelayCommand(_ => this.TryCatch(() => this.ReadValue = this.ReadSymbol.Read(this.AdsClient)), _ => this.AdsClient.IsConnected);
-            this.WriteCommand = new RelayCommand(_ => this.TryCatch(() => this.WriteSymbol.Write(this.AdsClient, this.writeValue)), _ => this.AdsClient.IsConnected);
+            this.DisconnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Disconnect()));
+            this.ReadCommand = new RelayCommand(
+                _ => this.TryCatch(() => this.ReadValue = this.ReadSymbol.Read(this.AdsClient)),
+                _ => this.AdsClient.IsConnected && this.ReadSymbol.Name is { } && this.ReadSymbol.Type is { });
+            this.WriteCommand = new RelayCommand(
+                _ => this.TryCatch(() => this.WriteSymbol.Write(this.AdsClient, this.writeValue)),
+                _ => this.AdsClient.IsConnected && this.WriteSymbol.Name is { } && this.WriteSymbol.Type is { });
             this.ClearExceptionsCommand = new RelayCommand(_ => this.Exceptions.Clear(), _ => this.Exceptions.Count > 0);
         }
 
@@ -27,6 +32,8 @@
         public AdsClient AdsClient { get; } = new AdsClient();
 
         public ICommand ConnectCommand { get; }
+
+        public ICommand DisconnectCommand { get; }
 
         public ICommand ReadCommand { get; }
 

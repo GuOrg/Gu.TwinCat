@@ -60,6 +60,12 @@
                 Grid.Row="0"
                 Grid.Column="6"
                 Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected {0}'}" />
+
+            <Button
+                Grid.Row="0"
+                Grid.Column="5"
+                Command="{Binding DisconnectCommand}"
+                Content="Disconnect" />
         </Grid>
         <TabControl Grid.Row="1">
             <TabItem Header="Read Write">
@@ -166,23 +172,23 @@
                 <UniformGrid Rows="1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <ListBox Name="ExceptionsListBox" ItemsSource="{Binding Exceptions}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type system:Exception}">
-                                <TextBlock Text="{Binding Message}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                        <Button Content="Clear" Command="{Binding ClearExceptionsCommand}"></Button>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type system:Exception}">
+                                    <TextBlock Text="{Binding Message}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Command="{Binding ClearExceptionsCommand}" Content="Clear" />
                     </Grid>
 
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message}" />
                         <TextBox Grid.Row="1" Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.StackTrace}" />
