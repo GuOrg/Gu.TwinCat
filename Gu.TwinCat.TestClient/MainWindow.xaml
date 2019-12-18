@@ -178,6 +178,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -248,6 +250,30 @@
                         IsReadOnly="True"
                         IsReadOnlyCaretVisible="True"
                         Text="{Binding Subscription.CycleTime, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Text="Exception.Message" />
+
+                    <TextBox
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.Exception.Message, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Text="Exception.StackTrace" />
+
+                    <TextBox
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.Exception.StackTrace, Mode=OneWay}" />
                 </Grid>
             </TabItem>
 

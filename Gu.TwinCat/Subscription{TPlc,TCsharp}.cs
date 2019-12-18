@@ -22,6 +22,7 @@
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
         private TimeSpan notifyTime;
+        private Exception? exception;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subscription{TPlc, TCsharp}"/> class.
@@ -115,7 +116,7 @@
         }
 
         /// <summary>
-        /// The time the event handlesr for <see cref="Value"/> and <see cref="LastUpdateTime"/> took.
+        /// The time the event handler for <see cref="Value"/> and <see cref="LastUpdateTime"/> took.
         /// Mostly for debug purposes.
         /// </summary>
         public TimeSpan NotifyTime
@@ -129,6 +130,24 @@
                 }
 
                 this.notifyTime = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The exception thrown in AdsClient.AdsNotification handler.
+        /// </summary>
+        public Exception? Exception
+        {
+            get => this.exception;
+            set
+            {
+                if (ReferenceEquals(value, this.exception))
+                {
+                    return;
+                }
+
+                this.exception = value;
                 this.OnPropertyChanged();
             }
         }
@@ -157,11 +176,21 @@
         {
             if (e.NotificationHandle == this.handle)
             {
-                var time = DateTimeOffset.UtcNow;
-                this.stream!.Position = e.Offset;
-                this.Value = Maybe.Some(this.Symbol.Map(this.read(this.reader!, e.Length)));
-                this.LastUpdateTime = time;
-                this.NotifyTime = DateTimeOffset.UtcNow - time;
+                try
+                {
+                    var time = DateTimeOffset.UtcNow;
+                    this.stream!.Position = e.Offset;
+                    this.Value = Maybe.Some(this.Symbol.Map(this.read(this.reader!, e.Length)));
+                    this.LastUpdateTime = time;
+                    this.NotifyTime = DateTimeOffset.UtcNow - time;
+                    this.Exception = null;
+                }
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (Exception exception)
+#pragma warning restore CA1031 // Do not catch general exception types
+                {
+                    this.Exception = exception;
+                }
             }
         }
 
