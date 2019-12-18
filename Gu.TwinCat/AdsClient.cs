@@ -7,23 +7,21 @@
     /// <summary>ADS Client / ADS Communication object.</summary>
     public class AdsClient : TcAdsClient, IAdsClient
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdsClient"/> class.
+        /// </summary>
+        public AdsClient()
+        {
+            this.ConnectionStateChanged += (_, __) =>
+            {
+                this.OnPropertyChanged(nameof(this.ClientAddress));
+                this.OnPropertyChanged(nameof(this.IsConnected));
+                this.OnPropertyChanged(nameof(this.ConnectionState));
+            };
+        }
+
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        /// <summary>Establishes a connection to a ADS device.</summary>
-        /// <param name="netId">NetId of the ADS server.</param>
-        /// <param name="srvPort">Port number of the ADS server.</param>
-        public new void Connect(string netId, int srvPort)
-        {
-            if (netId is null)
-            {
-                throw new System.ArgumentNullException(nameof(netId));
-            }
-
-            base.Connect(netId, srvPort);
-            this.OnPropertyChanged(nameof(this.ClientAddress));
-            this.OnPropertyChanged(nameof(this.IsConnected));
-        }
 
         /// <summary>
         /// Reads the value of a symbol and returns the value as object. The parameter type must have the same
