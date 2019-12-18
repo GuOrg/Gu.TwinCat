@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// A <see cref="TimeSpan"/> for ADS.
+    /// </summary>
     public struct AdsTimeSpan : IEquatable<AdsTimeSpan>
     {
         /// <summary>

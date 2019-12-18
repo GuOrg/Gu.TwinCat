@@ -209,3 +209,6 @@ dotnet_diagnostic.SA1623.severity = none
 
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
+
+# CA1051: Do not declare visible instance fields
+dotnet_diagnostic.CA1051.severity = none

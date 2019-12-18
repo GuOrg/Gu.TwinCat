@@ -11,7 +11,7 @@ namespace Gu.TwinCat
     public static partial class ReadFromAdsSymbol
     {
 <#
-    foreach (var type in new[]{ "Boolean", "Byte", "Char", "Double", "Int16", "Int32", "Int64", "SByte", "Single", "UInt16", "UInt32", "UInt64" })
+    foreach (var type in new[]{ "Boolean", "Byte", "Char", "Double", "Int16", "Int32", "Int64", "SByte", "Single", "UInt16", "UInt32", "UInt64", "String" })
     {
 #>
         /// <summary>
@@ -22,7 +22,7 @@ namespace Gu.TwinCat
         /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, <#= type #>}"/> struct.</returns>
         public static ReadFromAdsSymbol<<#= type #>, <#= type #>> <#= type #>(string name, bool isActive = true)
         {
-            return new ReadFromAdsSymbol<<#= type #>, <#= type #>>(name, x => x, (reader, _) => reader.Read<#= type #>(), isActive);
+            return new ReadFromAdsSymbol<<#= type #>, <#= type #>>(name, x => x, isActive);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Gu.TwinCat
         /// <returns>A new instance of the <see cref="T:ReadFromAdsSymbol{<#= type #>, TCsharp}"/> struct.</returns>
         public static ReadFromAdsSymbol<<#= type #>, TCsharp> <#= type #><TCsharp>(string name, Func<<#= type #>, TCsharp> map, bool isActive = true)
         {
-            return new ReadFromAdsSymbol<<#= type #>, TCsharp>(name, map, (reader, _) => reader.Read<#= type #>(), isActive);
+            return new ReadFromAdsSymbol<<#= type #>, TCsharp>(name, map, isActive);
         }
 
 <#

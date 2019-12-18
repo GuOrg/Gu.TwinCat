@@ -17,6 +17,7 @@
         private readonly AdsBinaryReader? reader;
         private readonly int handle;
         private readonly IAdsConnection client;
+        private readonly Func<AdsBinaryReader, int, TPlc> read;
         private bool disposed;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
@@ -26,12 +27,14 @@
         /// </summary>
         /// <param name="client">The <see cref="IAdsConnection"/>.</param>
         /// <param name="symbol">The <see cref="ReadFromAdsSymbol{TPlc, TCsharp}"/>.</param>
+        /// <param name="read">Example (reader, _) => reader.ReadUint32().</param>
         /// <param name="transMode">Specifies if the event should be fired cyclically or only if the variable has changed.</param>
         /// <param name="cycleTime">The ADS server checks whether the variable has changed after this time interval.</param>
         /// <param name="maxDelay">The AdsNotification event is fired at the latest when this time has elapsed.</param>
-        public Subscription(IAdsConnection client, ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
+        public Subscription(IAdsConnection client, ReadFromAdsSymbol<TPlc, TCsharp> symbol, Func<AdsBinaryReader, int, TPlc> read, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.read = read;
             this.Symbol = symbol;
             this.TransMode = transMode;
             this.CycleTime = cycleTime;
@@ -47,7 +50,7 @@
             }
             else
             {
-                this.value = Maybe.Some(symbol.Map(default));
+                this.value = Maybe.Some(symbol.Map(default!));
             }
         }
 
@@ -82,7 +85,7 @@
             get => this.value;
             private set
             {
-                if (System.Collections.Generic.EqualityComparer<TCsharp>.Default.Equals(value, this.value))
+                if (value == this.value)
                 {
                     return;
                 }
@@ -136,7 +139,7 @@
                 ReferenceEquals(this.stream, e.DataStream))
             {
                 this.LastUpdateTime = DateTimeOffset.UtcNow;
-                this.Value = Maybe.Some(this.Symbol.Map(this.Symbol.Read(this.reader!, e.Length)));
+                this.Value = Maybe.Some(this.Symbol.Map(this.read(this.reader!, e.Length)));
             }
         }
 

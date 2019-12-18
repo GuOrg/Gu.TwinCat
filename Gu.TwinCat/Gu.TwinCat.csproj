@@ -45,7 +45,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>WriteToAdsSymbol.generated.cs</LastGenOutput>
     </None>
-    <Compile Include="WriteToAdsSymbol.generated.cs">
+    <Compile Update="WriteToAdsSymbol.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WriteToAdsSymbol.tt</DependentUpon>
