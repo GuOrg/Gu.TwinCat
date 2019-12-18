@@ -26,6 +26,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
@@ -63,7 +64,7 @@
 
             <Button
                 Grid.Row="0"
-                Grid.Column="5"
+                Grid.Column="7"
                 Command="{Binding DisconnectCommand}"
                 Content="Disconnect" />
         </Grid>
@@ -168,12 +169,94 @@
                 </UniformGrid>
             </TabItem>
 
+            <TabItem Header="Subscribe">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Symbol" />
+
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding SubscribeSymbol}" />
+
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Command="{Binding SubscribeCommand}"
+                        Content="Subscribe" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Value" />
+
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.Value, Converter={x:Static local:MaybeToStringConverter.Default}, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="LastUpdateTime" />
+
+                    <TextBox
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.LastUpdateTime, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="TransMode" />
+
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.TransMode, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Text="CycleTime" />
+
+                    <TextBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="True"
+                        Text="{Binding Subscription.CycleTime, Mode=OneWay}" />
+                </Grid>
+            </TabItem>
+
             <TabItem Header="Exceptions">
                 <UniformGrid Rows="1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <ListBox Name="ExceptionsListBox" ItemsSource="{Binding Exceptions}">
                             <ListBox.ItemTemplate>
@@ -182,7 +265,10 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Command="{Binding ClearExceptionsCommand}" Content="Clear" />
+                        <Button
+                            Grid.Row="1"
+                            Command="{Binding ClearExceptionsCommand}"
+                            Content="Clear" />
                     </Grid>
 
                     <Grid>
@@ -190,8 +276,8 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message}" />
-                        <TextBox Grid.Row="1" Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.StackTrace}" />
+                        <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message, Mode=OneWay}" />
+                        <TextBox Grid.Row="1" Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.StackTrace, Mode=OneWay}" />
                     </Grid>
                 </UniformGrid>
             </TabItem>

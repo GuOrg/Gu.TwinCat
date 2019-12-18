@@ -77,5 +77,8 @@
         {
             return this.Milliseconds;
         }
+
+        /// <inheritdoc />
+        public override string ToString() => $"{this.Milliseconds} ms";
     }
 }

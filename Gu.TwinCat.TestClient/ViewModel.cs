@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Windows.Input;
+    using TwinCAT.Ads;
 
     public sealed class ViewModel : IDisposable, INotifyPropertyChanged
     {
@@ -13,17 +14,26 @@
         private int port;
         private object? readValue;
         private object? writeValue;
+        private string? subscribeSymbol;
+        private Subscription<float, float>? subscription;
 
         public ViewModel()
         {
             this.ConnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Connect(this.netId!, this.port)));
             this.DisconnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Disconnect()));
+
             this.ReadCommand = new RelayCommand(
                 _ => this.TryCatch(() => this.ReadValue = this.ReadSymbol.Read(this.AdsClient)),
                 _ => this.AdsClient.IsConnected && this.ReadSymbol.Name is { } && this.ReadSymbol.Type is { });
+
             this.WriteCommand = new RelayCommand(
                 _ => this.TryCatch(() => this.WriteSymbol.Write(this.AdsClient, this.writeValue)),
                 _ => this.AdsClient.IsConnected && this.WriteSymbol.Name is { } && this.WriteSymbol.Type is { });
+
+            this.SubscribeCommand = new RelayCommand(
+                _ => this.TryCatch(() => this.Subscription = this.AdsClient.Subscribe(ReadFromAdsSymbol.Single(this.subscribeSymbol), AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100))),
+                _ => this.AdsClient.IsConnected && this.subscribeSymbol is { });
+
             this.ClearExceptionsCommand = new RelayCommand(_ => this.Exceptions.Clear(), _ => this.Exceptions.Count > 0);
         }
 
@@ -38,6 +48,8 @@
         public ICommand ReadCommand { get; }
 
         public ICommand WriteCommand { get; }
+
+        public ICommand SubscribeCommand { get; }
 
         public ICommand ClearExceptionsCommand { get; }
 
@@ -107,6 +119,37 @@
             }
         }
 
+        public string? SubscribeSymbol
+        {
+            get => this.subscribeSymbol;
+            set
+            {
+                if (value == this.subscribeSymbol)
+                {
+                    return;
+                }
+
+                this.subscribeSymbol = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public Subscription<float, float>? Subscription
+        {
+            get => this.subscription;
+            private set
+            {
+                if (ReferenceEquals(value, this.subscription))
+                {
+                    return;
+                }
+
+                this.subscription?.Dispose();
+                this.subscription = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         public void Dispose()
         {
             if (this.disposed)
@@ -116,6 +159,7 @@
 
             this.disposed = true;
             this.AdsClient.Dispose();
+            this.subscription?.Dispose();
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
