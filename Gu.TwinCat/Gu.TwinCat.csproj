@@ -35,11 +35,21 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ReadFromAdsSymbol.generated.cs</LastGenOutput>
     </None>
-
     <Compile Update="ReadFromAdsSymbol.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ReadFromAdsSymbol.tt</DependentUpon>
     </Compile>
+
+    <None Update="WriteToAdsSymbol.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WriteToAdsSymbol.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="WriteToAdsSymbol.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WriteToAdsSymbol.tt</DependentUpon>
+    </Compile>
+
   </ItemGroup>
 </Project>
