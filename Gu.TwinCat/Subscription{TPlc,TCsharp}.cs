@@ -21,6 +21,7 @@
         private bool disposed;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
+        private TimeSpan notifyTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subscription{TPlc, TCsharp}"/> class.
@@ -45,7 +46,7 @@
                 this.stream = new AdsStream();
                 this.reader = new AdsBinaryReader(this.stream);
                 client.AdsNotification += this.OnAdsNotification;
-                client.ConnectionStateChanged += this.ClientOnConnectionStateChanged;
+                client.ConnectionStateChanged += this.OnConnectionStateChanged;
                 this.handle = client.AddDeviceNotification(symbol.Name, this.stream, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null);
             }
             else
@@ -113,6 +114,25 @@
             }
         }
 
+        /// <summary>
+        /// The time the event handlesr for <see cref="Value"/> and <see cref="LastUpdateTime"/> took.
+        /// Mostly for debug purposes.
+        /// </summary>
+        public TimeSpan NotifyTime
+        {
+            get => this.notifyTime;
+            set
+            {
+                if (value == this.notifyTime)
+                {
+                    return;
+                }
+
+                this.notifyTime = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -126,7 +146,7 @@
             {
                 this.client.DeleteDeviceNotification(this.handle);
                 this.client.AdsNotification -= this.OnAdsNotification;
-                this.client.ConnectionStateChanged -= this.ClientOnConnectionStateChanged;
+                this.client.ConnectionStateChanged -= this.OnConnectionStateChanged;
             }
 
             this.stream?.Dispose();
@@ -135,15 +155,17 @@
 
         private void OnAdsNotification(object sender, AdsNotificationEventArgs e)
         {
-            if (e.NotificationHandle == this.handle &&
-                ReferenceEquals(this.stream, e.DataStream))
+            if (e.NotificationHandle == this.handle)
             {
-                this.LastUpdateTime = DateTimeOffset.UtcNow;
+                var time = DateTimeOffset.UtcNow;
+                this.stream!.Position = e.Offset;
                 this.Value = Maybe.Some(this.Symbol.Map(this.read(this.reader!, e.Length)));
+                this.LastUpdateTime = time;
+                this.NotifyTime = DateTimeOffset.UtcNow - time;
             }
         }
 
-        private void ClientOnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
+        private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
             switch (e.NewState)
             {
