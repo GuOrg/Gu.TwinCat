@@ -1,6 +1,7 @@
 ﻿namespace Gu.TwinCat
 {
     using System;
+    using TwinCAT.Ads;
 
     /// <summary>
     /// A symbol for reading from the PLC.
@@ -14,11 +15,13 @@
         /// </summary>
         /// <param name="name">The symbol name.</param>
         /// <param name="map">The mapping ex x => Length.FromMillimetres(x).</param>
+        /// <param name="read">Example (reader, _) => reader.ReadUint32().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
-        public ReadFromAdsSymbol(string name, Func<TPlc, TCsharp> map, bool isActive = true)
+        public ReadFromAdsSymbol(string name, Func<TPlc, TCsharp> map, Func<AdsBinaryReader, int, TPlc> read, bool isActive = true)
         {
             this.Name = name;
             this.Map = map;
+            this.Read = read;
             this.IsActive = isActive;
         }
 
@@ -31,6 +34,11 @@
         /// The mapping ex x => Length.FromMillimetres(x).
         /// </summary>
         public Func<TPlc, TCsharp> Map { get; }
+
+        /// <summary>
+        /// Example (reader, _) => reader.ReadUint32().
+        /// </summary>
+        public Func<AdsBinaryReader, int, TPlc> Read { get; }
 
         /// <summary>
         /// Specifies if the symbol is currently active.
