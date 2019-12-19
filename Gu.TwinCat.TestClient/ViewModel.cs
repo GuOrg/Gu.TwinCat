@@ -12,28 +12,11 @@
         private bool disposed;
         private string? netId;
         private int port = 851;
-        private object? readValue;
-        private object? writeValue;
-        private string? subscribeSymbol;
-        private Subscription<float, float>? subscription;
 
         public ViewModel()
         {
             this.ConnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Connect(this.netId!, this.port)));
             this.DisconnectCommand = new RelayCommand(_ => this.TryCatch(() => this.AdsClient.Disconnect()));
-
-            this.ReadCommand = new RelayCommand(
-                _ => this.TryCatch(() => this.ReadValue = this.ReadSymbol.Read(this.AdsClient)),
-                _ => this.AdsClient.IsConnected && this.ReadSymbol.Name is { } && this.ReadSymbol.Type is { });
-
-            this.WriteCommand = new RelayCommand(
-                _ => this.TryCatch(() => this.WriteSymbol.Write(this.AdsClient, this.writeValue)),
-                _ => this.AdsClient.IsConnected && this.WriteSymbol.Name is { } && this.WriteSymbol.Type is { });
-
-            this.SubscribeCommand = new RelayCommand(
-                _ => this.TryCatch(() => this.Subscription = this.AdsClient.Subscribe(ReadFromAdsSymbol.Single(this.subscribeSymbol), AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100), AdsTimeSpan.FromMilliseconds(1000))),
-                _ => this.AdsClient.IsConnected && this.subscribeSymbol is { });
-
             this.ClearExceptionsCommand = new RelayCommand(_ => this.Exceptions.Clear(), _ => this.Exceptions.Count > 0);
         }
 
@@ -44,12 +27,6 @@
         public ICommand ConnectCommand { get; }
 
         public ICommand DisconnectCommand { get; }
-
-        public ICommand ReadCommand { get; }
-
-        public ICommand WriteCommand { get; }
-
-        public ICommand SubscribeCommand { get; }
 
         public ICommand ClearExceptionsCommand { get; }
 
@@ -85,70 +62,11 @@
             }
         }
 
-        public SymbolViewModel ReadSymbol { get; } = new SymbolViewModel();
+        public ObservableCollection<ReadSymbolViewModel> ReadSymbols { get; } = new ObservableCollection<ReadSymbolViewModel>();
 
-        public object? ReadValue
-        {
-            get => this.readValue;
-            set
-            {
-                if (ReferenceEquals(value, this.readValue))
-                {
-                    return;
-                }
+        public ObservableCollection<WriteSymbolViewModel> WriteSymbols { get; } = new ObservableCollection<WriteSymbolViewModel>();
 
-                this.readValue = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public SymbolViewModel WriteSymbol { get; } = new SymbolViewModel();
-
-        public object? WriteValue
-        {
-            get => this.writeValue;
-            set
-            {
-                if (ReferenceEquals(value, this.writeValue))
-                {
-                    return;
-                }
-
-                this.writeValue = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string? SubscribeSymbol
-        {
-            get => this.subscribeSymbol;
-            set
-            {
-                if (value == this.subscribeSymbol)
-                {
-                    return;
-                }
-
-                this.subscribeSymbol = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public Subscription<float, float>? Subscription
-        {
-            get => this.subscription;
-            private set
-            {
-                if (ReferenceEquals(value, this.subscription))
-                {
-                    return;
-                }
-
-                this.subscription?.Dispose();
-                this.subscription = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<SubscribeSymbolViewModel> SubscribeSymbols { get; } = new ObservableCollection<SubscribeSymbolViewModel>();
 
         public void Dispose()
         {
@@ -159,15 +77,13 @@
 
             this.disposed = true;
             this.AdsClient.Dispose();
-            this.subscription?.Dispose();
+            foreach (var subscribeSymbol in this.SubscribeSymbols)
+            {
+                (subscribeSymbol.Subscription as IDisposable)?.Dispose();
+            }
         }
 
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void TryCatch(Action action)
+        public void TryCatch(Action action)
         {
             try
             {
@@ -179,6 +95,11 @@
             {
                 this.Exceptions.Add(e);
             }
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

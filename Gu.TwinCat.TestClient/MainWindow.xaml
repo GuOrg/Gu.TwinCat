@@ -1,15 +1,14 @@
-﻿<Window
-    x:Class="Gu.TwinCat.TestClient.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    Title="MainWindow"
-    Width="800"
-    Height="450"
-    mc:Ignorable="d">
+﻿<Window x:Class="Gu.TwinCat.TestClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        Title="MainWindow"
+        Width="800"
+        Height="450"
+        mc:Ignorable="d">
     <Window.DataContext>
         <local:ViewModel />
     </Window.DataContext>
@@ -31,246 +30,143 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Text="NetId:" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="NetId:" />
 
-            <TextBox
-                Grid.Row="0"
-                Grid.Column="1"
-                MinWidth="100"
-                Text="{Binding NetId}" />
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="3"
-                Text="Port:" />
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     MinWidth="120"
+                     Text="{Binding NetId}" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="3"
+                       VerticalAlignment="Center"
+                       Text=" Port: " />
 
-            <TextBox
-                Grid.Row="0"
-                Grid.Column="4"
-                MinWidth="30"
-                Text="{Binding Port}" />
+            <TextBox Grid.Row="0"
+                     Grid.Column="4"
+                     MinWidth="30"
+                     Text="{Binding Port}" />
 
-            <Button
-                Grid.Row="0"
-                Grid.Column="5"
-                Command="{Binding ConnectCommand}"
-                Content="Connect" />
+            <Button Grid.Row="0"
+                    Grid.Column="5"
+                    Command="{Binding ConnectCommand}"
+                    Content="Connect" />
 
-            <Button
-                Grid.Row="0"
-                Grid.Column="6"
-                Command="{Binding DisconnectCommand}"
-                Content="Disconnect" />
+            <Button Grid.Row="0"
+                    Grid.Column="6"
+                    Command="{Binding DisconnectCommand}"
+                    Content="Disconnect" />
         </Grid>
         <TabControl Grid.Row="1">
-            <TabItem Header="Read Write">
+            <TabItem Header="Read / Write">
                 <UniformGrid Rows="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                    <DataGrid AutoGenerateColumns="False"
+                              ItemsSource="{Binding ReadSymbols}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn MinWidth="130"
+                                                Binding="{Binding Name}"
+                                                Header="Name" />
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                            <DataGridComboBoxColumn Header="Type"
+                                                    ItemsSource="{x:Static local:Symbols.Types}"
+                                                    SelectedItemBinding="{Binding Type}" />
 
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Text="Symbol" />
+                            <DataGridTextColumn Binding="{Binding Value}"
+                                                Header="Value"
+                                                IsReadOnly="True" />
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Text="{Binding ReadSymbol.Name}" />
+                            <DataGridTemplateColumn Width="*"
+                                                    Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="local:PlcCommands.Read"
+                                                Content="Read">
+                                            <Button.CommandBindings>
+                                                <CommandBinding CanExecute="OnCanReadExecute"
+                                                                Command="local:PlcCommands.Read"
+                                                                Executed="OnReadExecuted" />
+                                            </Button.CommandBindings>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            ItemsSource="{Binding ReadSymbol.Types}"
-                            SelectedItem="{Binding ReadSymbol.Type}" />
+                    <DataGrid AutoGenerateColumns="False"
+                              ItemsSource="{Binding WriteSymbols}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn MinWidth="130"
+                                                Binding="{Binding Name}"
+                                                Header="Name" />
 
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Text="Value" />
+                            <DataGridComboBoxColumn Header="Type"
+                                                    ItemsSource="{x:Static local:Symbols.Types}"
+                                                    SelectedItemBinding="{Binding Type}" />
 
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Command="{Binding ReadCommand}"
-                            Content="Read" />
+                            <DataGridTextColumn Binding="{Binding Value}"
+                                                Header="Value" />
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            IsReadOnly="True"
-                            IsReadOnlyCaretVisible="True"
-                            Text="{Binding ReadValue}" />
-                    </Grid>
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Text="Symbol" />
-
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Text="{Binding WriteSymbol.Name}" />
-
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            ItemsSource="{Binding WriteSymbol.Types}"
-                            SelectedItem="{Binding WriteSymbol.Type}" />
-
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Text="Value" />
-
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Command="{Binding WriteCommand}"
-                            Content="Write" />
-
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            IsReadOnly="True"
-                            IsReadOnlyCaretVisible="True"
-                            Text="{Binding WriteValue}" />
-                    </Grid>
+                            <DataGridTemplateColumn Width="*"
+                                                    Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="local:PlcCommands.Write"
+                                                Content="Write">
+                                            <Button.CommandBindings>
+                                                <CommandBinding CanExecute="OnCanWriteExecute"
+                                                                Command="local:PlcCommands.Write"
+                                                                Executed="OnWriteExecuted" />
+                                            </Button.CommandBindings>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </UniformGrid>
             </TabItem>
 
             <TabItem Header="Subscribe">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <DataGrid AutoGenerateColumns="False"
+                          ItemsSource="{Binding SubscribeSymbols}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn MinWidth="130"
+                                            Binding="{Binding Name}"
+                                            Header="Name" />
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                        <DataGridComboBoxColumn Header="Type"
+                                                ItemsSource="{x:Static local:Symbols.Types}"
+                                                SelectedItemBinding="{Binding Type}" />
 
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Text="Symbol" />
+                        <DataGridTextColumn Binding="{Binding Subscription.Value,
+                                                              Mode=OneWay,
+                                                              Converter={x:Static local:MaybeToStringConverter.Default}}"
+                                            Header="Value" />
+                        <DataGridTextColumn Binding="{Binding Subscription.LastUpdateTime,
+                                                              Mode=OneWay,
+                                                              StringFormat='{}mm:ss'}"
+                                            Header="LastUpdateTime" />
 
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Text="{Binding SubscribeSymbol}" />
-
-                    <Button
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Command="{Binding SubscribeCommand}"
-                        Content="Subscribe" />
-
-                    <TextBlock
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Text="Value" />
-
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.Value, Converter={x:Static local:MaybeToStringConverter.Default}, Mode=OneWay}" />
-
-                    <TextBlock
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        Text="LastUpdateTime" />
-
-                    <TextBox
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.LastUpdateTime, Mode=OneWay}" />
-
-                    <TextBlock
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        Text="TransMode" />
-
-                    <TextBox
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.TransMode, Mode=OneWay}" />
-
-                    <TextBlock
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        Text="CycleTime" />
-
-                    <TextBox
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.CycleTime, Mode=OneWay}" />
-
-                    <TextBlock
-                        Grid.Row="6"
-                        Grid.Column="0"
-                        Text="Exception.Message" />
-
-                    <TextBox
-                        Grid.Row="6"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.Exception.Message, Mode=OneWay}" />
-
-                    <TextBlock
-                        Grid.Row="7"
-                        Grid.Column="0"
-                        Text="Exception.StackTrace" />
-
-                    <TextBox
-                        Grid.Row="7"
-                        Grid.Column="1"
-                        IsReadOnly="True"
-                        IsReadOnlyCaretVisible="True"
-                        Text="{Binding Subscription.Exception.StackTrace, Mode=OneWay}" />
-                </Grid>
+                        <DataGridTemplateColumn Width="*"
+                                                Header="">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="local:PlcCommands.Subscribe"
+                                            Content="Subscribe">
+                                        <Button.CommandBindings>
+                                            <CommandBinding CanExecute="OnCanSubscribeExecute"
+                                                            Command="local:PlcCommands.Subscribe"
+                                                            Executed="OnSubscribeExecuted" />
+                                        </Button.CommandBindings>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
 
             <TabItem Header="Exceptions">
@@ -280,17 +176,17 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <ListBox Name="ExceptionsListBox" ItemsSource="{Binding Exceptions}">
+                        <ListBox Name="ExceptionsListBox"
+                                 ItemsSource="{Binding Exceptions}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type system:Exception}">
                                     <TextBlock Text="{Binding Message}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button
-                            Grid.Row="1"
-                            Command="{Binding ClearExceptionsCommand}"
-                            Content="Clear" />
+                        <Button Grid.Row="1"
+                                Command="{Binding ClearExceptionsCommand}"
+                                Content="Clear" />
                     </Grid>
 
                     <Grid>
@@ -299,16 +195,19 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message, Mode=OneWay}" />
-                        <TextBox Grid.Row="1" Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.StackTrace, Mode=OneWay}" />
+                        <TextBox Grid.Row="1"
+                                 Text="{Binding ElementName=ExceptionsListBox,
+                                                Path=SelectedItem.StackTrace,
+                                                Mode=OneWay}" />
                     </Grid>
                 </UniformGrid>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2">
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="6"
-                Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected {0}'}" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="6"
+                       Text="{Binding AdsClient.IsConnected,
+                                      StringFormat='IsConnected {0}'}" />
         </StatusBar>
     </Grid>
 </Window>
