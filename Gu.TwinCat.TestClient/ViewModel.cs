@@ -11,7 +11,7 @@
     {
         private bool disposed;
         private string? netId;
-        private int port;
+        private int port = 851;
         private object? readValue;
         private object? writeValue;
         private string? subscribeSymbol;

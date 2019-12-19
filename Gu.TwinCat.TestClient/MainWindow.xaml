@@ -17,6 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -57,14 +58,9 @@
                 Command="{Binding ConnectCommand}"
                 Content="Connect" />
 
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="6"
-                Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected {0}'}" />
-
             <Button
                 Grid.Row="0"
-                Grid.Column="7"
+                Grid.Column="6"
                 Command="{Binding DisconnectCommand}"
                 Content="Disconnect" />
         </Grid>
@@ -308,5 +304,11 @@
                 </UniformGrid>
             </TabItem>
         </TabControl>
+        <StatusBar Grid.Row="2">
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="6"
+                Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected {0}'}" />
+        </StatusBar>
     </Grid>
 </Window>

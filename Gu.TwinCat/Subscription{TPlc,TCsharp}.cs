@@ -186,10 +186,10 @@
                     this.Exception = null;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception exception)
+                catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
-                    this.Exception = exception;
+                    this.Exception = ex;
                 }
             }
         }
