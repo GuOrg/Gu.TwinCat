@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using TwinCAT;
     using TwinCAT.Ads;
 
@@ -45,7 +46,27 @@
                 {
                     try
                     {
-                        this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc));
+                        if (typeof(TPlc).IsValueType)
+                        {
+                            this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc));
+                        }
+                        else if (typeof(TPlc) == typeof(string))
+                        {
+                            var tcAdsSymbol = this.client.ReadSymbolInfo(symbol.Name);
+                            var size = tcAdsSymbol.Size;
+                            this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                        }
+                        else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
+                                arrayType.GetElementType() is { IsValueType: true } elementType)
+                        {
+                            var tcAdsSymbol = this.client.ReadSymbolInfo(symbol.Name);
+                            var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
+                            this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Cannot subscribe to the type {typeof(TPlc)}.");
+                        }
                     }
 #pragma warning disable CA1031 // Do not catch general exception types
                     catch (Exception ex)
@@ -266,7 +287,7 @@
         {
             if (this.disposed)
             {
-                throw new ObjectDisposedException(this.GetType().FullName);
+                throw new ObjectDisposedException(typeof(Subscription<TPlc, TCsharp>).FullName);
             }
         }
     }

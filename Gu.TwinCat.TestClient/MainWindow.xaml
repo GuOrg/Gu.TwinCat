@@ -5,10 +5,10 @@
         xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        local:DataGrid.CellEditMode="True"
         Title="MainWindow"
         Width="800"
         Height="450"
+        local:DataGrid.CellEditMode="True"
         mc:Ignorable="d">
     <Window.DataContext>
         <local:ViewModel />
@@ -68,14 +68,17 @@
                               ItemsSource="{Binding ReadSymbols}">
                         <DataGrid.Columns>
                             <DataGridTextColumn MinWidth="180"
-                                                Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
+                                                Binding="{Binding Name,
+                                                                  UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
                             <DataGridComboBoxColumn Header="Type"
                                                     ItemsSource="{x:Static local:Symbols.Types}"
-                                                    SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                                                    SelectedItemBinding="{Binding Type,
+                                                                                  UpdateSourceTrigger=PropertyChanged}" />
 
-                            <DataGridTextColumn Binding="{Binding Value, Converter={x:Static local:ObjectToStringConverter.Default}}"
+                            <DataGridTextColumn Binding="{Binding Value,
+                                                                  Converter={x:Static local:ObjectToStringConverter.Default}}"
                                                 Header="Value"
                                                 IsReadOnly="True" />
 
@@ -102,12 +105,14 @@
                               ItemsSource="{Binding WriteSymbols}">
                         <DataGrid.Columns>
                             <DataGridTextColumn MinWidth="180"
-                                                Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
+                                                Binding="{Binding Name,
+                                                                  UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
                             <DataGridComboBoxColumn Header="Type"
                                                     ItemsSource="{x:Static local:Symbols.Types}"
-                                                    SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                                                    SelectedItemBinding="{Binding Type,
+                                                                                  UpdateSourceTrigger=PropertyChanged}" />
 
                             <DataGridTextColumn Binding="{Binding Value}"
                                                 Header="Value" />
@@ -138,12 +143,14 @@
                           ItemsSource="{Binding SubscribeSymbols}">
                     <DataGrid.Columns>
                         <DataGridTextColumn MinWidth="180"
-                                            Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
+                                            Binding="{Binding Name,
+                                                              UpdateSourceTrigger=LostFocus}"
                                             Header="Name" />
 
                         <DataGridComboBoxColumn Header="Type"
                                                 ItemsSource="{x:Static local:Symbols.Types}"
-                                                SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                                                SelectedItemBinding="{Binding Type,
+                                                                              UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn Binding="{Binding Subscription.Value,
                                                               Mode=OneWay,
