@@ -23,6 +23,38 @@
 
                 this.name = value;
                 this.OnPropertyChanged();
+                if (this.type is null &&
+                    value is { })
+                {
+                    if (value.Contains("_r"))
+                    {
+                        this.Type = typeof(float);
+                    }
+                    else if (value.Contains("_b"))
+                    {
+                        this.Type = typeof(bool);
+                    }
+                    else if (value.Contains("_i"))
+                    {
+                        this.Type = typeof(short);
+                    }
+                    else if (value.Contains("_di"))
+                    {
+                        this.Type = typeof(int);
+                    }
+                    else if (value.Contains("_udi"))
+                    {
+                        this.Type = typeof(uint);
+                    }
+                    else if (value.Contains("_a"))
+                    {
+                        this.Type = typeof(float[]);
+                    }
+                    else if (value.Contains("_s"))
+                    {
+                        this.Type = typeof(string);
+                    }
+                }
             }
         }
 
