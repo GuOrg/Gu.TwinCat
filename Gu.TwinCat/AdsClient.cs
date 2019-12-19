@@ -24,8 +24,7 @@
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// Reads the value of a symbol and returns the value as object. The parameter type must have the same
-        /// layout as the ADS symbol.
+        /// Reads the value of a symbol and returns the value.
         /// </summary>
         /// <typeparam name="TPlc">The PLC type.</typeparam>
         /// <typeparam name="TCsharp">The c# type.</typeparam>
@@ -42,8 +41,7 @@
         }
 
         /// <summary>
-        /// Reads the value of a symbol and returns the value as object. The parameter type must have the same
-        /// layout as the ADS symbol.
+        /// Writes the value of a symbol.
         /// </summary>
         /// <typeparam name="TCsharp">The c# type.</typeparam>
         /// <typeparam name="TPlc">The PLC type.</typeparam>
