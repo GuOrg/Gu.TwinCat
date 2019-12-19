@@ -5,7 +5,6 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Windows.Input;
-    using TwinCAT.Ads;
 
     public sealed class ViewModel : IDisposable, INotifyPropertyChanged
     {

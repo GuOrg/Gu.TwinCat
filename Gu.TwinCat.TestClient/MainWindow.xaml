@@ -16,10 +16,25 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Menu Grid.Row="1">
+            <Menu.CommandBindings>
+                <CommandBinding Command="ApplicationCommands.Save"
+                                Executed="OnSaveExecuted" />
+                <CommandBinding Command="ApplicationCommands.Open"
+                                Executed="OnOpenExecuted" />
+            </Menu.CommandBindings>
+            <MenuItem Header="File">
+                <MenuItem Command="ApplicationCommands.Save"
+                          Header="Save" />
+                <MenuItem Command="ApplicationCommands.Open"
+                          Header="Open" />
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -60,7 +75,7 @@
                     Command="{Binding DisconnectCommand}"
                     Content="Disconnect" />
         </Grid>
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="2">
             <TabItem Header="Read / Write">
                 <UniformGrid Rows="1">
                     <DataGrid AutoGenerateColumns="False"
@@ -235,7 +250,7 @@
                 </UniformGrid>
             </TabItem>
         </TabControl>
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="3">
             <TextBlock Grid.Row="0"
                        Grid.Column="6"
                        Text="{Binding AdsClient.IsConnected,

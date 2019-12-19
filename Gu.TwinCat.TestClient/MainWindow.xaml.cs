@@ -1,9 +1,12 @@
 ﻿namespace Gu.TwinCat.TestClient
 {
-    using System;
+    using System.IO;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using Microsoft.Win32;
+    using Newtonsoft.Json;
 
     public partial class MainWindow : Window
     {
@@ -97,6 +100,44 @@
                 this.DataContext is ViewModel { AdsClient: { IsConnected: true } } viewModel)
             {
                 viewModel.TryCatch(() => symbolVm.Unsubscribe());
+            }
+        }
+
+        private void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.DataContext is ViewModel viewModel)
+            {
+                var dialog = new SaveFileDialog();
+                if (dialog.ShowDialog(this) == true)
+                {
+                    File.WriteAllText(
+                        dialog.FileName,
+                        JsonConvert.SerializeObject(
+                        new State(
+                            viewModel.NetId,
+                            viewModel.Port,
+                            viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
+                            viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray())));
+                }
+            }
+        }
+
+        private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.DataContext is ViewModel viewModel)
+            {
+                //var dialog = new OpenFileDialog();
+                //if (dialog.ShowDialog(this) == true)
+                //{
+                //    File.WriteAllText(
+                //        dialog.FileName,
+                //        JsonConvert.SerializeObject(
+                //            new State(
+                //                viewModel.NetId,
+                //                viewModel.Port,
+                //                viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
+                //                viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray())));
+                //}
             }
         }
     }
