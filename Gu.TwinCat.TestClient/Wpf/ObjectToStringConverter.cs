@@ -18,6 +18,7 @@
                 bool s => s ? "true" : "false",
                 null => "null",
                 IFormattable x => x.ToString(null, CultureInfo.InvariantCulture),
+                TestStruct x => $"{{ BOOL: {x.BOOL}, UDINT: {x.UDINT}, BYTE: {x.BYTE}, UINT: {x.UINT}}}",
                 _ => value,
             };
         }

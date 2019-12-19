@@ -28,6 +28,7 @@
                 typeof(sbyte[]),
                 typeof(string),
                 typeof(string[]),
+                typeof(TestStruct),
             });
     }
 }

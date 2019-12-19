@@ -92,6 +92,7 @@
                     TypeCode.Single => client.Subscribe(CreateSymbol<float[]>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.SByte => client.Subscribe(CreateSymbol<sbyte[]>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.String => client.Subscribe(CreateSymbol<string[]>(), this.transMode, this.cycleTime, this.maxDelay),
+                    _ when this.Type == typeof(TestStruct) => client.Subscribe(new ReadFromAdsSymbol<TestStruct, TestStruct>(this.Name, x => x, isActive: true), this.transMode, this.cycleTime, this.maxDelay),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
                 };
             }

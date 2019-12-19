@@ -41,6 +41,7 @@
                     TypeCode.Single => client.Read(CreateSymbol<float[]>()),
                     TypeCode.SByte => client.Read(CreateSymbol<sbyte[]>()),
                     TypeCode.String => client.Read(CreateSymbol<string[]>()),
+                    _ when this.Type == typeof(TestStruct) => client.Read(new ReadFromAdsSymbol<TestStruct, TestStruct>(this.Name, x => x, isActive: true)),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
                 };
             }
