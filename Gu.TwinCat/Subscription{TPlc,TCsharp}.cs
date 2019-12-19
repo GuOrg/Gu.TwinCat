@@ -14,10 +14,8 @@
     public sealed class Subscription<TPlc, TCsharp> : IDisposable, INotifyPropertyChanged
     {
         private readonly IAdsConnection client;
-        private readonly Func<AdsBinaryReader, int, TPlc> read;
         private bool disposed;
-
-        private int handle;
+        private int handle = -1;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
         private TimeSpan notifyTime;
@@ -28,14 +26,12 @@
         /// </summary>
         /// <param name="client">The <see cref="IAdsConnection"/>.</param>
         /// <param name="symbol">The <see cref="ReadFromAdsSymbol{TPlc, TCsharp}"/>.</param>
-        /// <param name="read">Example (reader, _) => reader.ReadUint32().</param>
         /// <param name="transMode">Specifies if the event should be fired cyclically or only if the variable has changed.</param>
         /// <param name="cycleTime">The ADS server checks whether the variable has changed after this time interval.</param>
         /// <param name="maxDelay">The AdsNotification event is fired at the latest when this time has elapsed.</param>
-        public Subscription(IAdsConnection client, ReadFromAdsSymbol<TPlc, TCsharp> symbol, Func<AdsBinaryReader, int, TPlc> read, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
+        public Subscription(IAdsConnection client, ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
-            this.read = read;
             this.Symbol = symbol;
             this.TransMode = transMode;
             this.CycleTime = cycleTime;
@@ -45,7 +41,19 @@
             {
                 this.client.AdsNotificationEx += this.OnAdsNotificationEx;
                 this.client.ConnectionStateChanged += this.OnConnectionStateChanged;
-                this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc));
+                if (client.IsConnected)
+                {
+                    try
+                    {
+                        this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc));
+                    }
+#pragma warning disable CA1031 // Do not catch general exception types
+                    catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+                    {
+                        this.exception = ex;
+                    }
+                }
             }
             else
             {
@@ -132,7 +140,7 @@
         }
 
         /// <summary>
-        /// The exception thrown in AdsClient.AdsNotification handler.
+        /// The last <see cref="Exception"/>.
         /// </summary>
         public Exception? Exception
         {
@@ -160,9 +168,36 @@
             this.disposed = true;
             if (this.Symbol.IsActive)
             {
-                this.client.DeleteDeviceNotification(this.handle);
+                try
+                {
+                    this.client.DeleteDeviceNotification(this.handle);
+                }
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
+                {
+                    this.Exception = e;
+                }
+
                 this.client.AdsNotificationEx -= this.OnAdsNotificationEx;
                 this.client.ConnectionStateChanged -= this.OnConnectionStateChanged;
+            }
+        }
+
+        private void UpdateValue(Maybe<TCsharp> newValue)
+        {
+            try
+            {
+                var time = DateTimeOffset.UtcNow;
+                this.Value = newValue;
+                this.LastUpdateTime = time;
+                this.NotifyTime = DateTimeOffset.UtcNow - time;
+            }
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
+            {
+                this.Exception = e;
             }
         }
 
@@ -172,11 +207,7 @@
             {
                 try
                 {
-                    var time = DateTimeOffset.UtcNow;
-                    this.Value = Maybe.Some(this.Symbol.Map((TPlc)e.Value));
-                    this.LastUpdateTime = time;
-                    this.NotifyTime = DateTimeOffset.UtcNow - time;
-                    this.Exception = null;
+                    this.UpdateValue(Maybe.Some(this.Symbol.Map((TPlc)e.Value)));
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception ex)
@@ -189,23 +220,35 @@
 
         private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
-            switch (e.NewState)
+            switch (e.Reason)
             {
-                case ConnectionState.Connected:
+                case ConnectionStateChangedReason.None:
+                    break;
+                case ConnectionStateChangedReason.Established:
                     if (this.Symbol.IsActive)
                     {
-                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                        try
+                        {
+                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                        }
+#pragma warning disable CA1031 // Do not catch general exception types
+                        catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+                        {
+                            this.Exception = ex;
+                        }
                     }
 
-                    return;
-                case ConnectionState.None:
-                case ConnectionState.Lost:
-                case ConnectionState.Disconnected:
-                    this.LastUpdateTime = DateTimeOffset.UtcNow;
-                    this.Value = Maybe.None<TCsharp>();
+                    break;
+                case ConnectionStateChangedReason.Closed:
+                case ConnectionStateChangedReason.Lost:
+                case ConnectionStateChangedReason.Error:
+                    this.UpdateValue(Maybe.None<TCsharp>());
+                    break;
+                case ConnectionStateChangedReason.Resurrected:
                     break;
                 default:
-                    throw new InvalidEnumArgumentException(nameof(e), (int)e.NewState, typeof(ConnectionState));
+                    throw new InvalidEnumArgumentException(nameof(e), (int)e.Reason, typeof(ConnectionStateChangedReason));
             }
         }
 

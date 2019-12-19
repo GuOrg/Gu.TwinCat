@@ -31,7 +31,7 @@
                 _ => this.AdsClient.IsConnected && this.WriteSymbol.Name is { } && this.WriteSymbol.Type is { });
 
             this.SubscribeCommand = new RelayCommand(
-                _ => this.TryCatch(() => this.Subscription = this.AdsClient.Subscribe(ReadFromAdsSymbol.Single(this.subscribeSymbol), AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100))),
+                _ => this.TryCatch(() => this.Subscription = this.AdsClient.Subscribe(ReadFromAdsSymbol.Single(this.subscribeSymbol), AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100), AdsTimeSpan.FromMilliseconds(1000))),
                 _ => this.AdsClient.IsConnected && this.subscribeSymbol is { });
 
             this.ClearExceptionsCommand = new RelayCommand(_ => this.Exceptions.Clear(), _ => this.Exceptions.Count > 0);
