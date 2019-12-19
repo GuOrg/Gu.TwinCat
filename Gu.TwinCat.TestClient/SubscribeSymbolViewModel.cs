@@ -77,7 +77,7 @@
         {
             if (this.Type!.IsArray)
             {
-                this.Subscription = System.Type.GetTypeCode(this.Type.GetElementType()) switch
+                this.Subscription = Type.GetTypeCode(this.Type.GetElementType()) switch
                 {
                     TypeCode.Boolean => client.Subscribe(CreateSymbol<bool[]>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.Byte => client.Subscribe(CreateSymbol<byte[]>(), this.transMode, this.cycleTime, this.maxDelay),
@@ -117,6 +117,11 @@
             }
 
             ReadFromAdsSymbol<T, T> CreateSymbol<T>() => new ReadFromAdsSymbol<T, T>(this.Name, x => x, isActive: true);
+        }
+
+        public void Unsubscribe()
+        {
+            this.Subscription = null;
         }
 
         public void Dispose()

@@ -161,11 +161,27 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Command="local:PlcCommands.Subscribe"
-                                            Content="Subscribe">
+                                            Content="Start">
                                         <Button.CommandBindings>
                                             <CommandBinding CanExecute="OnCanSubscribeExecute"
                                                             Command="local:PlcCommands.Subscribe"
                                                             Executed="OnSubscribeExecuted" />
+                                        </Button.CommandBindings>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Width="*"
+                                                Header="">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="local:PlcCommands.Unsubscribe"
+                                            Content="Stop">
+                                        <Button.CommandBindings>
+                                            <CommandBinding CanExecute="OnCanUnsubscribeExecute"
+                                                            Command="local:PlcCommands.Unsubscribe"
+                                                            Executed="OnUnsubscribeExecuted" />
                                         </Button.CommandBindings>
                                     </Button>
                                 </DataTemplate>

@@ -1,7 +1,6 @@
 ﻿namespace Gu.TwinCat.TestClient
 {
     using System;
-    using System.Data;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -78,7 +77,7 @@
                 if (this.editRow is { IsEditing: true } &&
                     sender is System.Windows.Controls.DataGrid dataGrid)
                 {
-                    _ = dataGrid.CommitEdit(DataGridEditingUnit.Row, false);
+                    _ = dataGrid.CommitEdit(DataGridEditingUnit.Row, exitEditingMode: false);
                 }
 
                 this.editRow = null;

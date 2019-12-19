@@ -65,7 +65,7 @@
         /// <param name="cycleTime">The ADS server checks whether the variable has changed after this time interval.</param>
         /// <param name="maxDelay">The AdsNotification event is fired at the latest when this time has elapsed.</param>
         /// <returns>A new instance of the <see cref="Subscription{Single, TCsharp}"/> class.</returns>
-        public Subscription<TPlc, TCsharp> Subscribe<TPlc,TCsharp>(ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay = default)
+        public Subscription<TPlc, TCsharp> Subscribe<TPlc, TCsharp>(ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay = default)
         {
             return new Subscription<TPlc, TCsharp>(this, symbol, transMode, cycleTime, maxDelay);
         }

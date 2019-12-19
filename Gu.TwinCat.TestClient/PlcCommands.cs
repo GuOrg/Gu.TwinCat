@@ -9,5 +9,7 @@
         public static RoutedUICommand Write { get; } = new RoutedUICommand(nameof(Write), nameof(Write), typeof(PlcCommands));
 
         public static RoutedUICommand Subscribe { get; } = new RoutedUICommand(nameof(Subscribe), nameof(Subscribe), typeof(PlcCommands));
+
+        public static RoutedUICommand Unsubscribe { get; } = new RoutedUICommand(nameof(Unsubscribe), nameof(Unsubscribe), typeof(PlcCommands));
     }
 }
