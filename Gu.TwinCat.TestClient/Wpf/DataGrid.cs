@@ -10,7 +10,10 @@
             "CellEditMode",
             typeof(bool),
             typeof(DataGrid),
-            new PropertyMetadata(default(bool), OnCellEditModeChanged));
+            new FrameworkPropertyMetadata(
+                default(bool),
+                FrameworkPropertyMetadataOptions.Inherits,
+                OnCellEditModeChanged));
 
         private static readonly DependencyProperty ListenerProperty = DependencyProperty.RegisterAttached(
             "Listener",
@@ -20,12 +23,12 @@
                 default(Listener),
                 (o, e) => (e.OldValue as IDisposable)?.Dispose()));
 
-        public static void SetCellEditMode(System.Windows.Controls.DataGrid element, bool value)
+        public static void SetCellEditMode(DependencyObject element, bool value)
         {
             element.SetValue(CellEditModeProperty, value);
         }
 
-        public static bool GetCellEditMode(System.Windows.Controls.DataGrid element)
+        public static bool GetCellEditMode(DependencyObject element)
         {
             return (bool)element.GetValue(CellEditModeProperty);
         }
@@ -34,16 +37,9 @@
         {
             if (d is System.Windows.Controls.DataGrid dataGrid)
             {
-                if (Equals(true, e.NewValue))
-                {
-#pragma warning disable IDISP004,CA2000 // Don't ignore created IDisposable.
-                    dataGrid.SetValue(ListenerProperty, new Listener(dataGrid));
-#pragma warning restore IDISP004,CA2000 // Don't ignore created IDisposable.
-                }
-                else
-                {
-                    dataGrid.SetValue(ListenerProperty, null);
-                }
+#pragma warning disable CA2000 // Dispose objects before losing scope
+                dataGrid.SetValue(ListenerProperty, Equals(true, e.NewValue) ? new Listener(dataGrid) : null);
+#pragma warning restore CA2000 // Dispose objects before losing scope
             }
         }
 

@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        local:DataGrid.CellEditMode="True"
         Title="MainWindow"
         Width="800"
         Height="450"
@@ -64,10 +65,9 @@
                 <UniformGrid Rows="1">
                     <DataGrid AutoGenerateColumns="False"
                               IsSynchronizedWithCurrentItem="True"
-                              local:DataGrid.CellEditMode="True"
                               ItemsSource="{Binding ReadSymbols}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn MinWidth="130"
+                            <DataGridTextColumn MinWidth="180"
                                                 Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
@@ -75,7 +75,7 @@
                                                     ItemsSource="{x:Static local:Symbols.Types}"
                                                     SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
 
-                            <DataGridTextColumn Binding="{Binding Value}"
+                            <DataGridTextColumn Binding="{Binding Value, Converter={x:Static local:ObjectToStringConverter.Default}}"
                                                 Header="Value"
                                                 IsReadOnly="True" />
 
@@ -99,10 +99,9 @@
 
                     <DataGrid AutoGenerateColumns="False"
                               IsSynchronizedWithCurrentItem="True"
-                              local:DataGrid.CellEditMode="True"
                               ItemsSource="{Binding WriteSymbols}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn MinWidth="130"
+                            <DataGridTextColumn MinWidth="180"
                                                 Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
@@ -136,10 +135,9 @@
             <TabItem Header="Subscribe">
                 <DataGrid AutoGenerateColumns="False"
                           IsSynchronizedWithCurrentItem="True"
-                          local:DataGrid.CellEditMode="True"
                           ItemsSource="{Binding SubscribeSymbols}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn MinWidth="130"
+                        <DataGridTextColumn MinWidth="180"
                                             Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                             Header="Name" />
 
@@ -155,6 +153,11 @@
                                                               Mode=OneWay,
                                                               StringFormat='{}mm:ss'}"
                                             Header="LastUpdateTime" />
+
+                        <DataGridTextColumn Binding="{Binding Subscription.Exception.Message,
+                                                              Mode=OneWay,
+                                                              StringFormat='{}mm:ss'}"
+                                            Header="Exception" />
 
                         <DataGridTemplateColumn Width="*"
                                                 Header="">

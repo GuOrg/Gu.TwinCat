@@ -89,7 +89,12 @@
         /// </summary>
         public Maybe<TCsharp> Value
         {
-            get => this.value;
+            get
+            {
+                this.ThrowIfDisposed();
+                return this.value;
+            }
+
             private set
             {
                 if (value == this.value)
@@ -255,6 +260,14 @@
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (this.disposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
         }
     }
 }
