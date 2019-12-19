@@ -13,12 +13,11 @@
     /// <typeparam name="TCsharp">The c# type.</typeparam>
     public sealed class Subscription<TPlc, TCsharp> : IDisposable, INotifyPropertyChanged
     {
-        private readonly AdsStream? stream;
-        private readonly AdsBinaryReader? reader;
-        private readonly int handle;
         private readonly IAdsConnection client;
         private readonly Func<AdsBinaryReader, int, TPlc> read;
         private bool disposed;
+
+        private int handle;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
         private TimeSpan notifyTime;
@@ -44,11 +43,9 @@
 
             if (symbol.IsActive)
             {
-                this.stream = new AdsStream();
-                this.reader = new AdsBinaryReader(this.stream);
-                client.AdsNotification += this.OnAdsNotification;
-                client.ConnectionStateChanged += this.OnConnectionStateChanged;
-                this.handle = client.AddDeviceNotification(symbol.Name, this.stream, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null);
+                this.client.AdsNotificationEx += this.OnAdsNotificationEx;
+                this.client.ConnectionStateChanged += this.OnConnectionStateChanged;
+                this.handle = this.client.AddDeviceNotificationEx(symbol.Name, transMode, cycleTime.Milliseconds, maxDelay.Milliseconds, null, typeof(TPlc));
             }
             else
             {
@@ -164,23 +161,19 @@
             if (this.Symbol.IsActive)
             {
                 this.client.DeleteDeviceNotification(this.handle);
-                this.client.AdsNotification -= this.OnAdsNotification;
+                this.client.AdsNotificationEx -= this.OnAdsNotificationEx;
                 this.client.ConnectionStateChanged -= this.OnConnectionStateChanged;
             }
-
-            this.stream?.Dispose();
-            this.reader?.Dispose();
         }
 
-        private void OnAdsNotification(object sender, AdsNotificationEventArgs e)
+        private void OnAdsNotificationEx(object sender, AdsNotificationExEventArgs e)
         {
             if (e.NotificationHandle == this.handle)
             {
                 try
                 {
                     var time = DateTimeOffset.UtcNow;
-                    this.stream!.Position = e.Offset;
-                    this.Value = Maybe.Some(this.Symbol.Map(this.read(this.reader!, e.Length)));
+                    this.Value = Maybe.Some(this.Symbol.Map((TPlc)e.Value));
                     this.LastUpdateTime = time;
                     this.NotifyTime = DateTimeOffset.UtcNow - time;
                     this.Exception = null;
@@ -198,9 +191,14 @@
         {
             switch (e.NewState)
             {
-                case ConnectionState.None:
                 case ConnectionState.Connected:
+                    if (this.Symbol.IsActive)
+                    {
+                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                    }
+
                     return;
+                case ConnectionState.None:
                 case ConnectionState.Lost:
                 case ConnectionState.Disconnected:
                     this.LastUpdateTime = DateTimeOffset.UtcNow;
