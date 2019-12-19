@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="1">
+        <Menu Grid.Row="0">
             <Menu.CommandBindings>
                 <CommandBinding Command="ApplicationCommands.Save"
                                 Executed="OnSaveExecuted" />

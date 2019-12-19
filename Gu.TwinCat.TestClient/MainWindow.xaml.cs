@@ -10,6 +10,12 @@
 
     public partial class MainWindow : Window
     {
+        private const string Filter = "Json Files | *.json";
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+        };
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -107,17 +113,18 @@
         {
             if (this.DataContext is ViewModel viewModel)
             {
-                var dialog = new SaveFileDialog();
+                var dialog = new SaveFileDialog { Filter = Filter };
                 if (dialog.ShowDialog(this) == true)
                 {
                     File.WriteAllText(
                         dialog.FileName,
                         JsonConvert.SerializeObject(
-                        new State(
-                            viewModel.NetId,
-                            viewModel.Port,
-                            viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
-                            viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray())));
+                            new State(
+                                viewModel.NetId,
+                                viewModel.Port,
+                                viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
+                                viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray()),
+                            JsonSerializerSettings));
                 }
             }
         }
@@ -126,18 +133,32 @@
         {
             if (this.DataContext is ViewModel viewModel)
             {
-                //var dialog = new OpenFileDialog();
-                //if (dialog.ShowDialog(this) == true)
-                //{
-                //    File.WriteAllText(
-                //        dialog.FileName,
-                //        JsonConvert.SerializeObject(
-                //            new State(
-                //                viewModel.NetId,
-                //                viewModel.Port,
-                //                viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
-                //                viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray())));
-                //}
+                var dialog = new OpenFileDialog { Filter = Filter };
+                if (dialog.ShowDialog(this) == true)
+                {
+                    var state = JsonConvert.DeserializeObject<State>(File.ReadAllText(dialog.FileName));
+                    viewModel.ReadSymbols.Clear();
+                    viewModel.WriteSymbols.Clear();
+                    foreach (var symbol in viewModel.SubscribeSymbols)
+                    {
+                        symbol.Dispose();
+                    }
+
+                    viewModel.SubscribeSymbols.Clear();
+
+                    viewModel.NetId = state.NetId;
+                    viewModel.Port = state.Port;
+                    foreach (var symbol in state.ReadSymbols)
+                    {
+                        viewModel.ReadSymbols.Add(new ReadSymbolViewModel { Name = symbol.Name, Type = symbol.Type });
+                        viewModel.SubscribeSymbols.Add(new SubscribeSymbolViewModel { Name = symbol.Name, Type = symbol.Type });
+                    }
+
+                    foreach (var symbol in state.WriteSymbols)
+                    {
+                        viewModel.WriteSymbols.Add(new WriteSymbolViewModel() { Name = symbol.Name, Type = symbol.Type });
+                    }
+                }
             }
         }
     }
