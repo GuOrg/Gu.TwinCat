@@ -1,5 +1,6 @@
 ﻿namespace Gu.TwinCat.TestClient
 {
+    using System;
     using System.Globalization;
     using System.Linq;
     using System.Windows.Data;
@@ -14,7 +15,9 @@
             {
                 float[] xs => string.Join(", ", xs.Select(x => x.ToString(CultureInfo.InvariantCulture))),
                 string s => $"\"{s}\"",
+                bool s => s ? "true" : "false",
                 null => "null",
+                IFormattable x => x.ToString(null, CultureInfo.InvariantCulture),
                 _ => value,
             };
         }
