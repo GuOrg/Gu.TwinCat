@@ -2,15 +2,15 @@
 {
     using System;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using TwinCAT.Ads;
 
-    public class SubscribeSymbolViewModel : AbstractSymbolViewModel
+    public sealed class SubscribeSymbolViewModel : AbstractSymbolViewModel, IDisposable
     {
         private AdsTransMode transMode = AdsTransMode.OnChange;
         private AdsTimeSpan cycleTime = AdsTimeSpan.FromMilliseconds(100);
         private AdsTimeSpan maxDelay = AdsTimeSpan.FromSeconds(1);
         private object? subscription;
+        private bool disposed;
 
         public AdsTransMode TransMode
         {
@@ -117,6 +117,17 @@
             }
 
             ReadFromAdsSymbol<T, T> CreateSymbol<T>() => new ReadFromAdsSymbol<T, T>(this.Name, x => x, isActive: true);
+        }
+
+        public void Dispose()
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+            (this.subscription as IDisposable)?.Dispose();
         }
     }
 }

@@ -79,7 +79,7 @@
             this.AdsClient.Dispose();
             foreach (var subscribeSymbol in this.SubscribeSymbols)
             {
-                (subscribeSymbol.Subscription as IDisposable)?.Dispose();
+                subscribeSymbol.Dispose();
             }
         }
 

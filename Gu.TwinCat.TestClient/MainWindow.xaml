@@ -63,15 +63,17 @@
             <TabItem Header="Read / Write">
                 <UniformGrid Rows="1">
                     <DataGrid AutoGenerateColumns="False"
+                              IsSynchronizedWithCurrentItem="True"
+                              local:DataGrid.CellEditMode="True"
                               ItemsSource="{Binding ReadSymbols}">
                         <DataGrid.Columns>
                             <DataGridTextColumn MinWidth="130"
-                                                Binding="{Binding Name}"
+                                                Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
                             <DataGridComboBoxColumn Header="Type"
                                                     ItemsSource="{x:Static local:Symbols.Types}"
-                                                    SelectedItemBinding="{Binding Type}" />
+                                                    SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
 
                             <DataGridTextColumn Binding="{Binding Value}"
                                                 Header="Value"
@@ -96,15 +98,17 @@
                     </DataGrid>
 
                     <DataGrid AutoGenerateColumns="False"
+                              IsSynchronizedWithCurrentItem="True"
+                              local:DataGrid.CellEditMode="True"
                               ItemsSource="{Binding WriteSymbols}">
                         <DataGrid.Columns>
                             <DataGridTextColumn MinWidth="130"
-                                                Binding="{Binding Name}"
+                                                Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                                 Header="Name" />
 
                             <DataGridComboBoxColumn Header="Type"
                                                     ItemsSource="{x:Static local:Symbols.Types}"
-                                                    SelectedItemBinding="{Binding Type}" />
+                                                    SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
 
                             <DataGridTextColumn Binding="{Binding Value}"
                                                 Header="Value" />
@@ -131,15 +135,17 @@
 
             <TabItem Header="Subscribe">
                 <DataGrid AutoGenerateColumns="False"
+                          IsSynchronizedWithCurrentItem="True"
+                          local:DataGrid.CellEditMode="True"
                           ItemsSource="{Binding SubscribeSymbols}">
                     <DataGrid.Columns>
                         <DataGridTextColumn MinWidth="130"
-                                            Binding="{Binding Name}"
+                                            Binding="{Binding Name, UpdateSourceTrigger=LostFocus}"
                                             Header="Name" />
 
                         <DataGridComboBoxColumn Header="Type"
                                                 ItemsSource="{x:Static local:Symbols.Types}"
-                                                SelectedItemBinding="{Binding Type}" />
+                                                SelectedItemBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn Binding="{Binding Subscription.Value,
                                                               Mode=OneWay,
