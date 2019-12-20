@@ -31,24 +31,14 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 
-    <None Update="ReadFromAdsSymbol.tt">
+    <None Update="Symbol.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ReadFromAdsSymbol.generated.cs</LastGenOutput>
+      <LastGenOutput>Symbol.generated.cs</LastGenOutput>
     </None>
-    <Compile Update="ReadFromAdsSymbol.generated.cs">
+    <Compile Update="Symbol.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ReadFromAdsSymbol.tt</DependentUpon>
-    </Compile>
-
-    <None Update="WriteToAdsSymbol.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>WriteToAdsSymbol.generated.cs</LastGenOutput>
-    </None>
-    <Compile Update="WriteToAdsSymbol.generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WriteToAdsSymbol.tt</DependentUpon>
+      <DependentUpon>Symbol.tt</DependentUpon>
     </Compile>
 
   </ItemGroup>
