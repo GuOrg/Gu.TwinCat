@@ -5,7 +5,7 @@
     /// <summary>
     /// Factory methods for <see cref="ReadFromAdsSymbol{TPlc,TCsharp}"/> and <see cref="WriteToAdsSymbol{TCsharp,TPlc}"/>.
     /// </summary>
-    public static partial class Symbol
+    public static partial class SymbolFactory
     {
         /// <summary>
         /// The start of the address space. Can be used for health check.

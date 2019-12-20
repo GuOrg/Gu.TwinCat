@@ -3,9 +3,9 @@
     using System;
 
     /// <summary>
-    /// Factory methods for <see cref="ReadFromAdsSymbol{TPlc,TCsharp}"/> and <see cref="WriteToAdsSymbol{TCsharp,TPlc}"/>.
+    /// Factory methods for <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.
     /// </summary>
-    public static partial class Symbol
+    public static partial class SymbolFactory
     {
         /// <summary>
         /// Creates a new instance of the <see cref="T:ReadFromAdsSymbol{Boolean, Boolean}"/> struct.

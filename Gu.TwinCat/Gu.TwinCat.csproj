@@ -31,15 +31,14 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 
-    <None Update="Symbol.tt">
+    <None Update="SymbolFactory.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Symbol.generated.cs</LastGenOutput>
+      <LastGenOutput>SymbolFactory.generated.cs</LastGenOutput>
     </None>
-    <Compile Update="Symbol.generated.cs">
+    <Compile Update="SymbolFactory.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Symbol.tt</DependentUpon>
+      <DependentUpon>SymbolFactory.tt</DependentUpon>
     </Compile>
-
   </ItemGroup>
 </Project>

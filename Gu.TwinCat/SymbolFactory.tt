@@ -8,7 +8,7 @@ namespace Gu.TwinCat
     /// <summary>
     /// Factory methods for <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.
     /// </summary>
-    public static partial class Symbol
+    public static partial class SymbolFactory
     {
 <#
     foreach (var type in new[]{ "Boolean", "Byte", "Char", "Double", "Int16", "Int32", "Int64", "SByte", "Single", "UInt16", "UInt32", "UInt64", "String"})
