@@ -22,7 +22,7 @@
                 Maybe<uint> maybe => maybe.HasValue ? maybe.Value.ToString(CultureInfo.InvariantCulture) : "missing",
                 Maybe<ulong> maybe => maybe.HasValue ? maybe.Value.ToString(CultureInfo.InvariantCulture) : "missing",
                 Maybe<sbyte> maybe => maybe.HasValue ? maybe.Value.ToString(CultureInfo.InvariantCulture) : "missing",
-                Maybe<string> maybe => maybe.HasValue ? $"\"{ maybe.Value}\"" : "missing",
+                Maybe<string> maybe => maybe.HasValue ? $"\"{maybe.Value}\"" : "missing",
                 Maybe<bool[]> maybe => maybe.HasValue ? maybe.Value is null ? "null" : string.Join(", ", maybe.Value.Select(x => x ? "true" : "false")) : "missing",
                 Maybe<byte[]> maybe => maybe.HasValue ? maybe.Value is null ? "null" : string.Join(", ", maybe.Value.Select(x => x.ToString(CultureInfo.InvariantCulture))) : "missing",
                 Maybe<double[]> maybe => maybe.HasValue ? maybe.Value is null ? "null" : string.Join(", ", maybe.Value.Select(x => x.ToString(CultureInfo.InvariantCulture))) : "missing",

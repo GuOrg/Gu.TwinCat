@@ -1,6 +1,5 @@
 ﻿namespace Gu.TwinCat.TestClient
 {
-    using System;
     using System.Collections.Generic;
 
     public class State
@@ -20,18 +19,5 @@
         public IReadOnlyList<SymbolState> ReadSymbols { get; }
 
         public IReadOnlyList<SymbolState> WriteSymbols { get; }
-
-        public class SymbolState
-        {
-            public SymbolState(string name, Type type)
-            {
-                this.Name = name;
-                this.Type = type;
-            }
-
-            public string Name { get;  }
-
-            public Type Type { get;  }
-        }
     }
 }

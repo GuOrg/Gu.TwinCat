@@ -122,8 +122,8 @@
                             new State(
                                 viewModel.NetId,
                                 viewModel.Port,
-                                viewModel.ReadSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray(),
-                                viewModel.WriteSymbols.Select(x => new State.SymbolState(x.Name, x.Type)).ToArray()),
+                                viewModel.ReadSymbols.Select(x => new SymbolState(x.Name, x.Type)).ToArray(),
+                                viewModel.WriteSymbols.Select(x => new SymbolState(x.Name, x.Type)).ToArray()),
                             JsonSerializerSettings));
                 }
             }
