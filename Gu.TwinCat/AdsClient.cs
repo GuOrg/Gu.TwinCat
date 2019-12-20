@@ -15,7 +15,7 @@
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
         /// <param name="inactiveSymbolHandling">The <see cref="TwinCat.InactiveSymbolHandling"/>.</param>
-        public AdsClient(InactiveSymbolHandling inactiveSymbolHandling)
+        public AdsClient(InactiveSymbolHandling inactiveSymbolHandling = InactiveSymbolHandling.Throw)
         {
             if (!Enum.IsDefined(typeof(InactiveSymbolHandling), inactiveSymbolHandling))
             {
