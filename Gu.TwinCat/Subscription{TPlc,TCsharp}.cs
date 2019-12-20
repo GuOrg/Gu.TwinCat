@@ -19,7 +19,8 @@
         private int handle = -1;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
-        private TimeSpan notifyTime;
+        private TimeSpan lastNotifyTime;
+        private UpdateTrigger lastTrigger;
         private Exception? exception;
 
         /// <summary>
@@ -121,17 +122,35 @@
         /// The time the event handler for <see cref="Value"/> and <see cref="LastUpdateTime"/> took.
         /// Mostly for debug purposes.
         /// </summary>
-        public TimeSpan NotifyTime
+        public TimeSpan LastNotifyTime
         {
-            get => this.notifyTime;
+            get => this.lastNotifyTime;
             set
             {
-                if (value == this.notifyTime)
+                if (value == this.lastNotifyTime)
                 {
                     return;
                 }
 
-                this.notifyTime = value;
+                this.lastNotifyTime = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The reason for the last update of <see cref="Value"/>.
+        /// </summary>
+        public UpdateTrigger LastTrigger
+        {
+            get => this.lastTrigger;
+            private set
+            {
+                if (value == this.lastTrigger)
+                {
+                    return;
+                }
+
+                this.lastTrigger = value;
                 this.OnPropertyChanged();
             }
         }
@@ -181,14 +200,41 @@
             }
         }
 
-        private void UpdateValue(Maybe<TCsharp> newValue)
+        /// <summary>
+        /// Force a read from PLC.
+        /// </summary>
+        public void Refresh()
+        {
+            if (this.Symbol.IsActive)
+            {
+                try
+                {
+                    this.UpdateValue(
+                        Maybe.Some(this.Symbol.Map((TPlc)this.client.ReadSymbol(this.Symbol.Name, typeof(TPlc), reloadSymbolInfo: false))),
+                        UpdateTrigger.Refresh);
+                }
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+                {
+                    this.Exception = ex;
+                }
+            }
+            else
+            {
+                this.UpdateValue(Maybe.Some(this.Symbol.Map(default!)), UpdateTrigger.Refresh);
+            }
+        }
+
+        private void UpdateValue(Maybe<TCsharp> newValue, UpdateTrigger trigger)
         {
             try
             {
                 var time = DateTimeOffset.UtcNow;
                 this.Value = newValue;
                 this.LastUpdateTime = time;
-                this.NotifyTime = DateTimeOffset.UtcNow - time;
+                this.LastNotifyTime = DateTimeOffset.UtcNow - time;
+                this.LastTrigger = trigger;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
@@ -256,7 +302,7 @@
             {
                 try
                 {
-                    this.UpdateValue(Maybe.Some(this.Symbol.Map((TPlc)e.Value)));
+                    this.UpdateValue(Maybe.Some(this.Symbol.Map((TPlc)e.Value)), UpdateTrigger.Refresh);
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception ex)
@@ -280,7 +326,7 @@
                 case ConnectionStateChangedReason.Closed:
                 case ConnectionStateChangedReason.Lost:
                 case ConnectionStateChangedReason.Error:
-                    this.UpdateValue(Maybe.None<TCsharp>());
+                    this.UpdateValue(Maybe.None<TCsharp>(), UpdateTrigger.ConnectionStateChanged);
                     break;
                 case ConnectionStateChangedReason.Resurrected:
                     break;
