@@ -9,8 +9,6 @@
     /// <summary>ADS Client / ADS Communication object.</summary>
     public class AdsClient : TcAdsClient, IAdsClient
     {
-        private readonly ConcurrentDictionary<string, object?> inactiveValues = new ConcurrentDictionary<string, object?>();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
@@ -57,7 +55,7 @@
             return this.InactiveSymbolHandling switch
             {
                 InactiveSymbolHandling.Throw => throw new InvalidOperationException("Reading inactive symbol is not allowed."),
-                InactiveSymbolHandling.UseDefault => symbol.Map((TPlc)this.inactiveValues.GetOrAdd(symbol.Name, _ => default(TPlc)!)!),
+                InactiveSymbolHandling.UseDefault => symbol.Map(default!),
                 _ => throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.InactiveSymbolHandling, typeof(InactiveSymbolHandling)),
             };
         }
@@ -82,7 +80,6 @@
                     case InactiveSymbolHandling.Throw:
                         throw new InvalidOperationException("Writing inactive symbol is not allowed.");
                     case InactiveSymbolHandling.UseDefault:
-                        this.inactiveValues[symbol.Name] = symbol.Map(value);
                         break;
                     default:
                         throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.InactiveSymbolHandling, typeof(InactiveSymbolHandling));

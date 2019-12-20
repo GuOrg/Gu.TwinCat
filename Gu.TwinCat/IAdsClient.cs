@@ -1,10 +1,11 @@
 ﻿namespace Gu.TwinCat
 {
     using System.ComponentModel;
+    using TwinCAT;
     using TwinCAT.Ads;
 
     /// <summary>ADS Client / ADS Communication object.</summary>
-    public interface IAdsClient : INotifyPropertyChanged
+    public interface IAdsClient : IConnection, INotifyPropertyChanged
     {
         /// <summary>Establishes a connection to a ADS device.</summary>
         /// <param name="netId">NetId of the ADS server.</param>
