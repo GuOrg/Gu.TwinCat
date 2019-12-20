@@ -173,12 +173,12 @@
                                             Header="Value" />
                         <DataGridTextColumn Binding="{Binding Subscription.LastUpdateTime,
                                                               Mode=OneWay,
-                                                              StringFormat='{}mm:ss'}"
+                                                              Converter={x:Static local:LocalTimeConverter.Default},
+                                                              StringFormat='{}HH:mm:ss'}"
                                             Header="LastUpdateTime" />
 
                         <DataGridTextColumn Binding="{Binding Subscription.Exception.Message,
-                                                              Mode=OneWay,
-                                                              StringFormat='{}mm:ss'}"
+                                                              Mode=OneWay}"
                                             Header="Exception" />
 
                         <DataGridTemplateColumn Width="*"
