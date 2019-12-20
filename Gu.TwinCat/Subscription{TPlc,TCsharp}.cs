@@ -215,10 +215,10 @@
             }
             else if (typeof(TPlc) == typeof(string))
             {
-                var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                var size = tcAdsSymbol.Size;
                 try
                 {
+                    var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                    var size = tcAdsSymbol.Size;
                     this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -231,10 +231,10 @@
             else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
                      arrayType.GetElementType() is { IsValueType: true } elementType)
             {
-                var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
                 try
                 {
+                    var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                    var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
                     this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
