@@ -1,7 +1,7 @@
 ﻿namespace Gu.TwinCat
 {
     using System;
-    using System.Timers;
+    using System.Threading;
     using TwinCAT.Ads;
 
     /// <summary>
@@ -13,9 +13,9 @@
         /// Initializes a new instance of the <see cref="AdsClientAutoReconnectSettings"/> class.
         /// </summary>
         /// <param name="address">The <see cref="AmsAddress"/>.</param>
-        /// <param name="reconnectInterval">The <see cref="TimeSpan"/>.</param>
+        /// <param name="reconnectInterval">The time between checks and attempts to reconnect.</param>
         /// <param name="inactiveSymbolHandling">The <see cref="TwinCat.InactiveSymbolHandling"/>.</param>
-        public AdsClientAutoReconnectSettings(AmsAddress? address, TimeSpan reconnectInterval, InactiveSymbolHandling inactiveSymbolHandling)
+        public AdsClientAutoReconnectSettings(AmsAddress? address, AdsTimeSpan reconnectInterval, InactiveSymbolHandling inactiveSymbolHandling)
              : base(address, inactiveSymbolHandling)
         {
             this.ReconnectInterval = reconnectInterval;
@@ -24,7 +24,7 @@
         /// <summary>
         /// The interval between checks and reconnects.
         /// </summary>
-        public TimeSpan ReconnectInterval { get; }
+        public AdsTimeSpan ReconnectInterval { get; }
 
         /// <summary>
         /// Create a listener that manages reconnects etc.
@@ -52,10 +52,7 @@
             {
                 this.client = client;
                 this.settings = settings;
-                this.OnElapsed(null, null!);
-                this.reconnectTimer = new Timer(settings.ReconnectInterval.TotalMilliseconds);
-                this.reconnectTimer.Elapsed += this.OnElapsed;
-                this.reconnectTimer.Start();
+                this.reconnectTimer = new Timer(this.OnElapsed, null, 0, settings.ReconnectInterval.Milliseconds);
             }
 
             public void Dispose()
@@ -66,11 +63,10 @@
                 }
 
                 this.disposed = true;
-                this.reconnectTimer.Elapsed -= this.OnElapsed;
                 this.reconnectTimer.Dispose();
             }
 
-            private void OnElapsed(object? sender, ElapsedEventArgs e)
+            private void OnElapsed(object? state)
             {
                 if (!this.client.IsConnected)
                 {

@@ -16,9 +16,9 @@
         AdsNotificationEx,
 
         /// <summary>
-        /// The IAdsConnection.ConnectionStateChanged event triggered the last update.
+        /// The IAdsConnection.ConnectionStateChanged or TcAdsClient.AdsStateChanged event triggered the last update.
         /// </summary>
-        ConnectionStateChanged,
+        StateChanged,
 
         /// <summary>
         /// A manual refresh triggered the update.

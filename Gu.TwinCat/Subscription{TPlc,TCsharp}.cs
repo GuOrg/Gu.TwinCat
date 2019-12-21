@@ -348,7 +348,7 @@
                     }
 
                     this.handle = -1;
-                    this.UpdateValue(Maybe.None<TCsharp>(), UpdateTrigger.ConnectionStateChanged);
+                    this.UpdateValue(Maybe.None<TCsharp>(), UpdateTrigger.StateChanged);
                 }
             }
         }
@@ -359,7 +359,7 @@
             {
                 try
                 {
-                    this.UpdateValue(Maybe.Some(this.Symbol.Map((TPlc)e.Value)), UpdateTrigger.Refresh);
+                    this.UpdateValue(Maybe.Some(this.Symbol.Map((TPlc)e.Value)), UpdateTrigger.AdsNotificationEx);
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception ex)
