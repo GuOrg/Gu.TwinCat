@@ -3,13 +3,12 @@
     using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using TwinCAT;
     using TwinCAT.Ads;
 
     /// <summary>ADS Client / ADS Communication object.</summary>
     public class AdsClient : TcAdsClient, IAdsClient
     {
-        private AdsState adsState;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
@@ -26,11 +25,12 @@
             this.AmsRouterNotification += (_, e) =>
             {
                 this.OnPropertyChanged(nameof(this.RouterState));
+                this.OnPropertyChanged(nameof(this.AdsState));
             };
 
             this.AdsStateChanged += (_, e) =>
             {
-                this.AdsState = e.State.AdsState;
+                this.OnPropertyChanged(nameof(this.AdsState));
             };
         }
 
@@ -43,22 +43,11 @@
         public InactiveSymbolHandling InactiveSymbolHandling { get; }
 
         /// <summary>
-        /// The <see cref="AdsState"/>.
+        /// The current <see cref="AdsState"/>.
         /// </summary>
-        public AdsState AdsState
-        {
-            get => this.adsState;
-            private set
-            {
-                if (value == this.adsState)
-                {
-                    return;
-                }
-
-                this.adsState = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public AdsState AdsState => this.IsConnected && this.TryReadState(out var state) == AdsErrorCode.NoError
+            ? state.AdsState
+            : AdsState.Invalid;
 
         /// <summary>
         /// Reads the value of a symbol and returns the value.
@@ -133,6 +122,7 @@
             this.OnPropertyChanged(nameof(this.IsConnected));
             this.OnPropertyChanged(nameof(this.ConnectionState));
             this.OnPropertyChanged(nameof(this.Id));
+            this.OnPropertyChanged(nameof(this.AdsState));
         }
 
         /// <summary>

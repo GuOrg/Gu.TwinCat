@@ -7,6 +7,16 @@
     /// <summary>ADS Client / ADS Communication object.</summary>
     public interface IAdsClient : IConnection, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Gets the current state of the local AMS Router.
+        /// </summary>
+        public AmsRouterState RouterState { get; }
+
+        /// <summary>
+        /// The current <see cref="AdsState"/>.
+        /// </summary>
+        public AdsState AdsState { get; }
+
         /// <summary>Establishes a connection to a ADS device.</summary>
         /// <param name="netId">NetId of the ADS server.</param>
         /// <param name="srvPort">Port number of the ADS server.</param>

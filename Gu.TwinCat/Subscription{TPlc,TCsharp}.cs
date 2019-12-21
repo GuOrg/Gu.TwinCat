@@ -43,10 +43,7 @@
             {
                 this.client.AdsNotificationEx += this.OnAdsNotificationEx;
                 this.client.ConnectionStateChanged += this.OnConnectionStateChanged;
-                if (client.IsConnected)
-                {
-                    this.Subscribe();
-                }
+                this.Subscribe();
             }
             else
             {
@@ -246,53 +243,56 @@
 
         private void Subscribe()
         {
-            if (typeof(TPlc).IsValueType)
+            if (this.client.IsConnected)
             {
-                try
+                if (typeof(TPlc).IsValueType)
                 {
-                    this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
-                }
+                    try
+                    {
+                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                    }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception e)
+                    catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    this.Exception = e;
+                    {
+                        this.Exception = e;
+                    }
                 }
-            }
-            else if (typeof(TPlc) == typeof(string))
-            {
-                try
+                else if (typeof(TPlc) == typeof(string))
                 {
-                    var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                    var size = tcAdsSymbol.Size;
-                    this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
-                }
+                    try
+                    {
+                        var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                        var size = tcAdsSymbol.Size;
+                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                    }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception e)
+                    catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    this.Exception = e;
+                    {
+                        this.Exception = e;
+                    }
                 }
-            }
-            else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
-                     arrayType.GetElementType() is { IsValueType: true } elementType)
-            {
-                try
+                else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
+                         arrayType.GetElementType() is { IsValueType: true } elementType)
                 {
-                    var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                    var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
-                    this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
-                }
+                    try
+                    {
+                        var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                        var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
+                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                    }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception e)
+                    catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    this.Exception = e;
+                    {
+                        this.Exception = e;
+                    }
                 }
-            }
-            else
-            {
-                throw new NotSupportedException($"Cannot subscribe to the type {typeof(TPlc)}.");
+                else
+                {
+                    throw new NotSupportedException($"Cannot subscribe to the type {typeof(TPlc)}.");
+                }
             }
         }
 
@@ -321,7 +321,6 @@
                     break;
                 case ConnectionStateChangedReason.Established:
                     this.Subscribe();
-
                     break;
                 case ConnectionStateChangedReason.Closed:
                 case ConnectionStateChangedReason.Lost:
