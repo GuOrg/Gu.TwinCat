@@ -9,19 +9,14 @@
     /// <summary>ADS Client / ADS Communication object.</summary>
     public class AdsClient : TcAdsClient, IAdsClient
     {
+        private readonly IDisposable disposable;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
-        /// <param name="inactiveSymbolHandling">The <see cref="TwinCat.InactiveSymbolHandling"/>.</param>
-        public AdsClient(InactiveSymbolHandling inactiveSymbolHandling = InactiveSymbolHandling.Throw)
+        /// <param name="settings">The <see cref="AdsClientAutoReconnectSettings"/>.</param>
+        public AdsClient(AdsClientAutoReconnectSettings settings)
         {
-            if (!Enum.IsDefined(typeof(InactiveSymbolHandling), inactiveSymbolHandling))
-            {
-                throw new InvalidEnumArgumentException(nameof(inactiveSymbolHandling), (int)inactiveSymbolHandling, typeof(InactiveSymbolHandling));
-            }
-
-            this.InactiveSymbolHandling = inactiveSymbolHandling;
-
             this.AmsRouterNotification += (_, e) =>
             {
                 this.OnPropertyChanged(nameof(this.RouterState));
@@ -32,15 +27,17 @@
             {
                 this.OnPropertyChanged(nameof(this.AdsState));
             };
+            this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            this.disposable = settings.CreateListener(this);
         }
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// Specifies how this instance handles inactive symbols.
+        /// The <see cref="AdsClientAutoReconnectSettings"/>.
         /// </summary>
-        public InactiveSymbolHandling InactiveSymbolHandling { get; }
+        public AdsClientAutoReconnectSettings Settings { get; }
 
         /// <summary>
         /// The current <see cref="AdsState"/>.
@@ -63,11 +60,11 @@
                 return symbol.Map((TPlc)this.ReadSymbol(symbol.Name, typeof(TPlc), reloadSymbolInfo: false));
             }
 
-            return this.InactiveSymbolHandling switch
+            return this.Settings.InactiveSymbolHandling switch
             {
                 InactiveSymbolHandling.Throw => throw new InvalidOperationException("Reading inactive symbol is not allowed."),
                 InactiveSymbolHandling.UseDefault => symbol.Map(default!),
-                _ => throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.InactiveSymbolHandling, typeof(InactiveSymbolHandling)),
+                _ => throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.Settings.InactiveSymbolHandling, typeof(InactiveSymbolHandling)),
             };
         }
 
@@ -86,14 +83,14 @@
             }
             else
             {
-                switch (this.InactiveSymbolHandling)
+                switch (this.Settings.InactiveSymbolHandling)
                 {
                     case InactiveSymbolHandling.Throw:
                         throw new InvalidOperationException("Writing inactive symbol is not allowed.");
                     case InactiveSymbolHandling.UseDefault:
                         break;
                     default:
-                        throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.InactiveSymbolHandling, typeof(InactiveSymbolHandling));
+                        throw new InvalidEnumArgumentException(nameof(AdsClient), (int)this.Settings.InactiveSymbolHandling, typeof(InactiveSymbolHandling));
                 }
             }
         }
@@ -132,6 +129,17 @@
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.disposable?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
