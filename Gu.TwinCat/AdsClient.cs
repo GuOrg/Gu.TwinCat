@@ -1,7 +1,6 @@
 ﻿namespace Gu.TwinCat
 {
     using System;
-    using System.Collections.Concurrent;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using TwinCAT.Ads;
@@ -130,6 +129,7 @@
         {
             base.OnConnectionStateChanged(newState, oldState);
             this.OnPropertyChanged(nameof(this.ClientAddress));
+            this.OnPropertyChanged(nameof(this.ClientCycle));
             this.OnPropertyChanged(nameof(this.IsConnected));
             this.OnPropertyChanged(nameof(this.ConnectionState));
             this.OnPropertyChanged(nameof(this.Id));
