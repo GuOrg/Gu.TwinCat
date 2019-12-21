@@ -53,7 +53,6 @@
                 this.client = client;
                 this.settings = settings;
                 this.OnElapsed(null, null!);
-                client.AmsRouterNotification += this.OnAmsRouterNotification;
                 this.reconnectTimer = new Timer(settings.ReconnectInterval.TotalMilliseconds);
                 this.reconnectTimer.Elapsed += this.OnElapsed;
                 this.reconnectTimer.Start();
@@ -68,7 +67,6 @@
 
                 this.disposed = true;
                 this.reconnectTimer.Elapsed -= this.OnElapsed;
-                this.client.AmsRouterNotification -= this.OnAmsRouterNotification;
                 this.reconnectTimer.Dispose();
             }
 
@@ -83,17 +81,6 @@
                     else if (this.settings.Adress is { } settingsAddress)
                     {
                         this.client.Connect(settingsAddress);
-                    }
-                }
-            }
-
-            private void OnAmsRouterNotification(object sender, TwinCAT.Ads.AmsRouterNotificationEventArgs e)
-            {
-                if (this.client.IsConnected)
-                {
-                    if (this.client.Disconnect())
-                    {
-                        this.client.Connect(this.client.Address);
                     }
                 }
             }

@@ -104,7 +104,7 @@
                                         <Button Command="local:PlcCommands.Read"
                                                 Content="Read">
                                             <Button.CommandBindings>
-                                                <CommandBinding CanExecute="OnCanReadExecute"
+                                                <CommandBinding CanExecute="OnReadCanExecute"
                                                                 Command="local:PlcCommands.Read"
                                                                 Executed="OnReadExecuted" />
                                             </Button.CommandBindings>
@@ -139,7 +139,7 @@
                                         <Button Command="local:PlcCommands.Write"
                                                 Content="Write">
                                             <Button.CommandBindings>
-                                                <CommandBinding CanExecute="OnCanWriteExecute"
+                                                <CommandBinding CanExecute="OnWriteCanExecute"
                                                                 Command="local:PlcCommands.Write"
                                                                 Executed="OnWriteExecuted" />
                                             </Button.CommandBindings>
@@ -188,7 +188,7 @@
                                     <Button Command="local:PlcCommands.Subscribe"
                                             Content="Start">
                                         <Button.CommandBindings>
-                                            <CommandBinding CanExecute="OnCanSubscribeExecute"
+                                            <CommandBinding CanExecute="OnSubscribeCanExecute"
                                                             Command="local:PlcCommands.Subscribe"
                                                             Executed="OnSubscribeExecuted" />
                                         </Button.CommandBindings>
@@ -204,7 +204,7 @@
                                     <Button Command="local:PlcCommands.Unsubscribe"
                                             Content="Stop">
                                         <Button.CommandBindings>
-                                            <CommandBinding CanExecute="OnCanUnsubscribeExecute"
+                                            <CommandBinding CanExecute="OnUnsubscribeCanExecute"
                                                             Command="local:PlcCommands.Unsubscribe"
                                                             Executed="OnUnsubscribeExecuted" />
                                         </Button.CommandBindings>

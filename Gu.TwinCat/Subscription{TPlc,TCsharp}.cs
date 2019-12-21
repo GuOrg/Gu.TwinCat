@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using TwinCAT;
@@ -14,6 +15,7 @@
     /// <typeparam name="TCsharp">The c# type.</typeparam>
     public sealed class Subscription<TPlc, TCsharp> : IDisposable, INotifyPropertyChanged
     {
+        private readonly object gate = new object();
         private readonly IAdsConnection client;
         private bool disposed;
         private int handle = -1;
@@ -41,9 +43,15 @@
 
             if (symbol.IsActive)
             {
-                this.client.AdsNotificationEx += this.OnAdsNotificationEx;
-                this.client.ConnectionStateChanged += this.OnConnectionStateChanged;
-                this.Subscribe();
+                client.AdsNotificationEx += this.OnAdsNotificationEx;
+                client.ConnectionStateChanged += this.OnConnectionStateChanged;
+
+                if (client is TcAdsClient adsClient)
+                {
+                    adsClient.AdsStateChanged += this.OnAdsStateChanged;
+                }
+
+                this.UpdateSubscription();
             }
             else
             {
@@ -181,15 +189,30 @@
             this.disposed = true;
             if (this.Symbol.IsActive)
             {
-                try
+                if (this.handle >= 0)
                 {
-                    this.client.DeleteDeviceNotification(this.handle);
-                }
+                    lock (this.gate)
+                    {
+                        if (this.handle >= 0)
+                        {
+                            try
+                            {
+                                this.client.DeleteDeviceNotification(this.handle);
+                                this.handle = -1;
+                            }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception e)
+                            catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
+                            {
+                                this.Exception = e;
+                            }
+                        }
+                    }
+                }
+
+                if (this.client is TcAdsClient adsClient)
                 {
-                    this.Exception = e;
+                    adsClient.AdsStateChanged -= this.OnAdsStateChanged;
                 }
 
                 this.client.AdsNotificationEx -= this.OnAdsNotificationEx;
@@ -241,57 +264,91 @@
             }
         }
 
-        private void Subscribe()
+        private void UpdateSubscription()
         {
-            if (this.client.IsConnected)
+            if (this.disposed)
             {
-                if (typeof(TPlc).IsValueType)
+                return;
+            }
+
+            lock (this.gate)
+            {
+                if (this.client.IsConnected &&
+                    this.client.TryReadState(out var state) == AdsErrorCode.NoError &&
+                    state.AdsState == AdsState.Run)
                 {
-                    try
+                    if (this.handle >= 0)
                     {
-                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                        return;
                     }
+
+                    if (typeof(TPlc).IsValueType)
+                    {
+                        try
+                        {
+                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                        }
 #pragma warning disable CA1031 // Do not catch general exception types
-                    catch (Exception e)
+                        catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
-                    {
-                        this.Exception = e;
+                        {
+                            this.Exception = e;
+                        }
                     }
-                }
-                else if (typeof(TPlc) == typeof(string))
-                {
-                    try
+                    else if (typeof(TPlc) == typeof(string))
                     {
-                        var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                        var size = tcAdsSymbol.Size;
-                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
-                    }
+                        try
+                        {
+                            var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                            var size = tcAdsSymbol.Size;
+                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                        }
 #pragma warning disable CA1031 // Do not catch general exception types
-                    catch (Exception e)
+                        catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
-                    {
-                        this.Exception = e;
+                        {
+                            this.Exception = e;
+                        }
                     }
-                }
-                else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
-                         arrayType.GetElementType() is { IsValueType: true } elementType)
-                {
-                    try
+                    else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
+                             arrayType.GetElementType() is { IsValueType: true } elementType)
                     {
-                        var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
-                        var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
-                        this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
-                    }
+                        try
+                        {
+                            var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                            var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
+                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                        }
 #pragma warning disable CA1031 // Do not catch general exception types
-                    catch (Exception e)
+                        catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
+                        {
+                            this.Exception = e;
+                        }
+                    }
+                    else
                     {
-                        this.Exception = e;
+                        throw new NotSupportedException($"Cannot subscribe to the type {typeof(TPlc)}.");
                     }
                 }
                 else
                 {
-                    throw new NotSupportedException($"Cannot subscribe to the type {typeof(TPlc)}.");
+                    if (this.handle >= 0)
+                    {
+                        try
+                        {
+                            _ = this.client.TryDeleteDeviceNotification((uint)this.handle);
+                        }
+#pragma warning disable CA1031 // Do not catch general exception types
+                        catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
+                        {
+                            this.Exception = e;
+                        }
+                    }
+
+                    this.handle = -1;
+                    this.UpdateValue(Maybe.None<TCsharp>(), UpdateTrigger.ConnectionStateChanged);
                 }
             }
         }
@@ -315,23 +372,16 @@
 
         private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
-            switch (e.Reason)
-            {
-                case ConnectionStateChangedReason.None:
-                    break;
-                case ConnectionStateChangedReason.Established:
-                    this.Subscribe();
-                    break;
-                case ConnectionStateChangedReason.Closed:
-                case ConnectionStateChangedReason.Lost:
-                case ConnectionStateChangedReason.Error:
-                    this.UpdateValue(Maybe.None<TCsharp>(), UpdateTrigger.ConnectionStateChanged);
-                    break;
-                case ConnectionStateChangedReason.Resurrected:
-                    break;
-                default:
-                    throw new InvalidEnumArgumentException(nameof(e), (int)e.Reason, typeof(ConnectionStateChangedReason));
-            }
+            Debug.WriteLine($"OnConnectionStateChanged before UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            this.UpdateSubscription();
+            Debug.WriteLine($"OnConnectionStateChanged after UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+        }
+
+        private void OnAdsStateChanged(object sender, AdsStateChangedEventArgs e)
+        {
+            Debug.WriteLine($"OnAdsStateChanged before UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            this.UpdateSubscription();
+            Debug.WriteLine($"OnAdsStateChanged after UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

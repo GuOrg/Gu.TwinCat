@@ -20,7 +20,6 @@
             this.AmsRouterNotification += (_, e) =>
             {
                 this.OnPropertyChanged(nameof(this.RouterState));
-                this.OnPropertyChanged(nameof(this.AdsState));
             };
 
             this.AdsStateChanged += (_, e) =>
@@ -111,15 +110,15 @@
         }
 
         /// <inheritdoc/>
-        protected override void OnConnectionStateChanged(TwinCAT.ConnectionState newState, TwinCAT.ConnectionState oldState)
+        protected override void OnConnectionStateChanged(ConnectionState newState, ConnectionState oldState)
         {
             base.OnConnectionStateChanged(newState, oldState);
+            this.OnPropertyChanged(nameof(this.Address));
             this.OnPropertyChanged(nameof(this.ClientAddress));
             this.OnPropertyChanged(nameof(this.ClientCycle));
             this.OnPropertyChanged(nameof(this.IsConnected));
             this.OnPropertyChanged(nameof(this.ConnectionState));
             this.OnPropertyChanged(nameof(this.Id));
-            this.OnPropertyChanged(nameof(this.AdsState));
         }
 
         /// <summary>

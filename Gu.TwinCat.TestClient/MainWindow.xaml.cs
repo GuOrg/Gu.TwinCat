@@ -21,7 +21,7 @@
             this.InitializeComponent();
         }
 
-        private void OnCanReadExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnReadCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (sender is Button button &&
                 button.DataContext is ReadSymbolViewModel { Name: { }, Type: { } } &&
@@ -43,7 +43,7 @@
             }
         }
 
-        private void OnCanWriteExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnWriteCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (sender is Button button &&
                 button.DataContext is WriteSymbolViewModel { Name: { }, Type: { } } &&
@@ -65,11 +65,11 @@
             }
         }
 
-        private void OnCanSubscribeExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnSubscribeCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (sender is Button button &&
                 button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { }, Subscription: null } &&
-                this.DataContext is ViewModel { AdsClient: { IsConnected: true } })
+                this.DataContext is ViewModel { })
             {
                 e.CanExecute = true;
             }
@@ -80,18 +80,18 @@
         private void OnSubscribeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             if (sender is Button button &&
-                button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { } } symbolVm &&
-                this.DataContext is ViewModel { AdsClient: { IsConnected: true } client } viewModel)
+                button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { }, Subscription: null } symbolVm &&
+                this.DataContext is ViewModel { AdsClient: { } client } viewModel)
             {
                 viewModel.TryCatch(() => symbolVm.Subscribe(client));
             }
         }
 
-        private void OnCanUnsubscribeExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void OnUnsubscribeCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (sender is Button button &&
                 button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { }, Subscription: { } } &&
-                this.DataContext is ViewModel { AdsClient: { IsConnected: true } })
+                this.DataContext is ViewModel { })
             {
                 e.CanExecute = true;
             }
@@ -102,8 +102,8 @@
         private void OnUnsubscribeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             if (sender is Button button &&
-                button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { } } symbolVm &&
-                this.DataContext is ViewModel { AdsClient: { IsConnected: true } } viewModel)
+                button.DataContext is SubscribeSymbolViewModel { Name: { }, Type: { }, Subscription: { } } symbolVm &&
+                this.DataContext is ViewModel { } viewModel)
             {
                 viewModel.TryCatch(() => symbolVm.Unsubscribe());
             }
