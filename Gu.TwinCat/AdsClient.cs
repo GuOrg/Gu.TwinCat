@@ -9,6 +9,8 @@
     /// <summary>ADS Client / ADS Communication object.</summary>
     public class AdsClient : TcAdsClient, IAdsClient
     {
+        private AdsState adsState;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
@@ -21,12 +23,15 @@
             }
 
             this.InactiveSymbolHandling = inactiveSymbolHandling;
-            this.ConnectionStateChanged += (_, __) =>
+
+            this.AmsRouterNotification += (_, e) =>
             {
-                this.OnPropertyChanged(nameof(this.ClientAddress));
-                this.OnPropertyChanged(nameof(this.IsConnected));
-                this.OnPropertyChanged(nameof(this.ConnectionState));
-                this.OnPropertyChanged(nameof(this.Id));
+                this.OnPropertyChanged(nameof(this.RouterState));
+            };
+
+            this.AdsStateChanged += (_, e) =>
+            {
+                this.AdsState = e.State.AdsState;
             };
         }
 
@@ -37,6 +42,24 @@
         /// Specifies how this instance handles inactive symbols.
         /// </summary>
         public InactiveSymbolHandling InactiveSymbolHandling { get; }
+
+        /// <summary>
+        /// The <see cref="AdsState"/>.
+        /// </summary>
+        public AdsState AdsState
+        {
+            get => this.adsState;
+            private set
+            {
+                if (value == this.adsState)
+                {
+                    return;
+                }
+
+                this.adsState = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Reads the value of a symbol and returns the value.
@@ -100,6 +123,16 @@
         public Subscription<TPlc, TCsharp> Subscribe<TPlc, TCsharp>(ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay = default)
         {
             return new Subscription<TPlc, TCsharp>(this, symbol, transMode, cycleTime, maxDelay);
+        }
+
+        /// <inheritdoc/>
+        protected override void OnConnectionStateChanged(TwinCAT.ConnectionState newState, TwinCAT.ConnectionState oldState)
+        {
+            base.OnConnectionStateChanged(newState, oldState);
+            this.OnPropertyChanged(nameof(this.ClientAddress));
+            this.OnPropertyChanged(nameof(this.IsConnected));
+            this.OnPropertyChanged(nameof(this.ConnectionState));
+            this.OnPropertyChanged(nameof(this.Id));
         }
 
         /// <summary>

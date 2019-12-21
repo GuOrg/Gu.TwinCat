@@ -251,10 +251,32 @@
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="3">
-            <TextBlock Grid.Row="0"
+            <StatusBarItem>
+                <TextBlock Grid.Row="0"
                        Grid.Column="6"
                        Text="{Binding AdsClient.IsConnected,
-                                      StringFormat='IsConnected {0}'}" />
+                                      StringFormat='IsConnected: {0}'}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Grid.Row="0"
+                       Grid.Column="6"
+                       Text="{Binding AdsClient.RouterState,
+                                      StringFormat='RouterState: {0}'}" />
+            </StatusBarItem>
+
+            <StatusBarItem>
+                <TextBlock Grid.Row="0"
+                       Grid.Column="6"
+                       Text="{Binding AdsClient.ConnectionState,
+                                      StringFormat='ConnectionState: {0}'}" />
+            </StatusBarItem>
+
+            <StatusBarItem>
+                <TextBlock Grid.Row="0"
+                       Grid.Column="6"
+                       Text="{Binding AdsClient.AdsState,
+                                      StringFormat='AdsState: {0}'}" />
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </Window>
