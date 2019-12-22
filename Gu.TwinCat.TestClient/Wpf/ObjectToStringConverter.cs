@@ -9,7 +9,7 @@
     {
         public static readonly ObjectToStringConverter Default = new ObjectToStringConverter();
 
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value switch
             {
@@ -23,9 +23,9 @@
             };
         }
 
-        object IValueConverter.ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new System.NotSupportedException($"{nameof(ObjectToStringConverter)} can only be used in OneWay bindings");
+            throw new NotSupportedException($"{nameof(ObjectToStringConverter)} can only be used in OneWay bindings");
         }
     }
 }

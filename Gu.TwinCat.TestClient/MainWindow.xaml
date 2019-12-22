@@ -167,6 +167,7 @@
                                                 SelectedItemBinding="{Binding Type,
                                                                               UpdateSourceTrigger=PropertyChanged}" />
 
+                        <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
                         <DataGridTextColumn Binding="{Binding Subscription.Value,
                                                               Mode=OneWay,
                                                               Converter={x:Static local:MaybeToStringConverter.Default}}"
@@ -180,6 +181,7 @@
                         <DataGridTextColumn Binding="{Binding Subscription.Exception.Message,
                                                               Mode=OneWay}"
                                             Header="Exception" />
+                        <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
 
                         <DataGridTemplateColumn Width="*"
                                                 Header="">
@@ -241,41 +243,32 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                         <TextBox Text="{Binding ElementName=ExceptionsListBox, Path=SelectedItem.Message, Mode=OneWay}" />
                         <TextBox Grid.Row="1"
                                  Text="{Binding ElementName=ExceptionsListBox,
                                                 Path=SelectedItem.StackTrace,
                                                 Mode=OneWay}" />
+                        <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                     </Grid>
                 </UniformGrid>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="3">
             <StatusBarItem>
-                <TextBlock Grid.Row="0"
-                       Grid.Column="6"
-                       Text="{Binding AdsClient.IsConnected,
-                                      StringFormat='IsConnected: {0}'}" />
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Grid.Row="0"
-                       Grid.Column="6"
-                       Text="{Binding AdsClient.RouterState,
-                                      StringFormat='RouterState: {0}'}" />
+                <TextBlock Text="{Binding AdsClient.IsConnected, StringFormat='IsConnected: {0}'}" />
             </StatusBarItem>
 
             <StatusBarItem>
-                <TextBlock Grid.Row="0"
-                       Grid.Column="6"
-                       Text="{Binding AdsClient.ConnectionState,
-                                      StringFormat='ConnectionState: {0}'}" />
+                <TextBlock Text="{Binding AdsClient.RouterState, StringFormat='RouterState: {0}'}" />
             </StatusBarItem>
 
             <StatusBarItem>
-                <TextBlock Grid.Row="0"
-                       Grid.Column="6"
-                       Text="{Binding AdsClient.AdsState,
-                                      StringFormat='AdsState: {0}'}" />
+                <TextBlock Text="{Binding AdsClient.ConnectionState, StringFormat='ConnectionState: {0}'}" />
+            </StatusBarItem>
+
+            <StatusBarItem>
+                <TextBlock Text="{Binding AdsClient.AdsState, StringFormat='AdsState: {0}'}" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

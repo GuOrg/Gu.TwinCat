@@ -1,9 +1,6 @@
 ﻿<Application x:Class="Gu.TwinCat.TestClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Gu.TwinCat.TestClient"
              StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+    <Application.Resources />
 </Application>

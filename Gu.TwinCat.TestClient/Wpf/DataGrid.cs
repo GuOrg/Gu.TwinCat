@@ -71,9 +71,9 @@
             private void OnCurrentCellChanged(object sender, EventArgs e)
             {
                 if (this.editRow is { IsEditing: true } &&
-                    sender is System.Windows.Controls.DataGrid dataGrid)
+                    sender is System.Windows.Controls.DataGrid senderGrid)
                 {
-                    _ = dataGrid.CommitEdit(DataGridEditingUnit.Row, exitEditingMode: false);
+                    _ = senderGrid.CommitEdit(DataGridEditingUnit.Row, exitEditingMode: false);
                 }
 
                 this.editRow = null;

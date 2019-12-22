@@ -75,9 +75,9 @@
 
         public void Subscribe(AdsClient client)
         {
-            if (this.Type!.IsArray)
+            this.Subscription = this.Type switch
             {
-                this.Subscription = Type.GetTypeCode(this.Type.GetElementType()) switch
+                { IsArray: true } => Type.GetTypeCode(this.Type.GetElementType()) switch
                 {
                     TypeCode.Boolean => client.Subscribe(CreateSymbol<bool[]>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.Byte => client.Subscribe(CreateSymbol<byte[]>(), this.transMode, this.cycleTime, this.maxDelay),
@@ -94,11 +94,8 @@
                     TypeCode.String => client.Subscribe(CreateSymbol<string[]>(), this.transMode, this.cycleTime, this.maxDelay),
                     _ when this.Type == typeof(TestStruct) => client.Subscribe(new ReadFromAdsSymbol<TestStruct, TestStruct>(this.Name, x => x, isActive: true), this.transMode, this.cycleTime, this.maxDelay),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
-                };
-            }
-            else
-            {
-                this.Subscription = Type.GetTypeCode(this.Type) switch
+                },
+                _ => Type.GetTypeCode(this.Type) switch
                 {
                     TypeCode.Boolean => client.Subscribe(CreateSymbol<bool>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.Byte => client.Subscribe(CreateSymbol<byte>(), this.transMode, this.cycleTime, this.maxDelay),
@@ -114,8 +111,8 @@
                     TypeCode.SByte => client.Subscribe(CreateSymbol<sbyte>(), this.transMode, this.cycleTime, this.maxDelay),
                     TypeCode.String => client.Subscribe(CreateSymbol<string>(), this.transMode, this.cycleTime, this.maxDelay),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
-                };
-            }
+                },
+            };
 
             ReadFromAdsSymbol<T, T> CreateSymbol<T>() => new ReadFromAdsSymbol<T, T>(this.Name, x => x, isActive: true);
         }

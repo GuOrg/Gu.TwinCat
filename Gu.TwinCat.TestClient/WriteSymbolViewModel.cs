@@ -25,7 +25,7 @@
 
         public void Write(AdsClient client)
         {
-            switch (System.Type.GetTypeCode(this.Type))
+            switch (Type.GetTypeCode(this.Type))
             {
                 case TypeCode.Boolean:
                     client.Write(CreateSymbol<bool>(), Convert.ToBoolean(this.value, CultureInfo.InvariantCulture));

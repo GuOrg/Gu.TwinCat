@@ -24,9 +24,9 @@
 
         public void Read(AdsClient client)
         {
-            if (this.Type!.IsArray)
+            this.Value = this.Type switch
             {
-                this.Value = System.Type.GetTypeCode(this.Type.GetElementType()) switch
+                { IsArray: true } => Type.GetTypeCode(this.Type.GetElementType()) switch
                 {
                     TypeCode.Boolean => client.Read(CreateSymbol<bool[]>()),
                     TypeCode.Byte => client.Read(CreateSymbol<byte[]>()),
@@ -43,11 +43,8 @@
                     TypeCode.String => client.Read(CreateSymbol<string[]>()),
                     _ when this.Type == typeof(TestStruct) => client.Read(new ReadFromAdsSymbol<TestStruct, TestStruct>(this.Name, x => x, isActive: true)),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
-                };
-            }
-            else
-            {
-                this.Value = Type.GetTypeCode(this.Type) switch
+                },
+                _ => Type.GetTypeCode(this.Type) switch
                 {
                     TypeCode.Boolean => client.Read(CreateSymbol<bool>()),
                     TypeCode.Byte => client.Read(CreateSymbol<byte>()),
@@ -63,8 +60,8 @@
                     TypeCode.SByte => client.Read(CreateSymbol<sbyte>()),
                     TypeCode.String => client.Read(CreateSymbol<string>()),
                     _ => throw new InvalidEnumArgumentException("Unhandled type.")
-                };
-            }
+                },
+            };
 
             ReadFromAdsSymbol<T, T> CreateSymbol<T>() => new ReadFromAdsSymbol<T, T>(this.Name, x => x, isActive: true);
         }
