@@ -16,7 +16,7 @@
     public sealed class Subscription<TPlc, TCsharp> : IDisposable, INotifyPropertyChanged
     {
         private readonly object gate = new object();
-        private readonly IAdsConnection client;
+        private readonly IAdsConnection connection;
         private bool disposed;
         private int handle = -1;
         private Maybe<TCsharp> value;
@@ -28,14 +28,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Subscription{TPlc, TCsharp}"/> class.
         /// </summary>
-        /// <param name="client">The <see cref="IAdsConnection"/>.</param>
+        /// <param name="connection">The <see cref="IAdsConnection"/>.</param>
         /// <param name="symbol">The <see cref="ReadFromAdsSymbol{TPlc, TCsharp}"/>.</param>
         /// <param name="transMode">Specifies if the event should be fired cyclically or only if the variable has changed.</param>
         /// <param name="cycleTime">The ADS server checks whether the variable has changed after this time interval.</param>
         /// <param name="maxDelay">The AdsNotification event is fired at the latest when this time has elapsed.</param>
-        public Subscription(IAdsConnection client, ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
+        public Subscription(IAdsConnection connection, ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay)
         {
-            this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.connection = connection ?? throw new ArgumentNullException(nameof(connection));
             this.Symbol = symbol;
             this.TransMode = transMode;
             this.CycleTime = cycleTime;
@@ -43,10 +43,10 @@
 
             if (symbol.IsActive)
             {
-                client.AdsNotificationEx += this.OnAdsNotificationEx;
-                client.ConnectionStateChanged += this.OnConnectionStateChanged;
+                connection.AdsNotificationEx += this.OnAdsNotificationEx;
+                connection.ConnectionStateChanged += this.OnConnectionStateChanged;
 
-                if (client is TcAdsClient adsClient)
+                if (connection is TcAdsClient adsClient)
                 {
                     adsClient.AdsStateChanged += this.OnAdsStateChanged;
                 }
@@ -197,7 +197,7 @@
                         {
                             try
                             {
-                                this.client.DeleteDeviceNotification(this.handle);
+                                this.connection.DeleteDeviceNotification(this.handle);
                                 this.handle = -1;
                             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -210,13 +210,13 @@
                     }
                 }
 
-                if (this.client is TcAdsClient adsClient)
+                if (this.connection is TcAdsClient adsClient)
                 {
                     adsClient.AdsStateChanged -= this.OnAdsStateChanged;
                 }
 
-                this.client.AdsNotificationEx -= this.OnAdsNotificationEx;
-                this.client.ConnectionStateChanged -= this.OnConnectionStateChanged;
+                this.connection.AdsNotificationEx -= this.OnAdsNotificationEx;
+                this.connection.ConnectionStateChanged -= this.OnConnectionStateChanged;
             }
         }
 
@@ -230,7 +230,7 @@
                 try
                 {
                     this.UpdateValue(
-                        Maybe.Some(this.Symbol.Map((TPlc)this.client.ReadSymbol(this.Symbol.Name, typeof(TPlc), reloadSymbolInfo: false))),
+                        Maybe.Some(this.Symbol.Map((TPlc)this.connection.ReadSymbol(this.Symbol.Name, typeof(TPlc), reloadSymbolInfo: false))),
                         UpdateTrigger.Refresh);
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -273,8 +273,8 @@
 
             lock (this.gate)
             {
-                if (this.client.IsConnected &&
-                    this.client.TryReadState(out var state) == AdsErrorCode.NoError &&
+                if (this.connection.IsConnected &&
+                    this.connection.TryReadState(out var state) == AdsErrorCode.NoError &&
                     state.AdsState == AdsState.Run)
                 {
                     if (this.handle >= 0)
@@ -286,7 +286,7 @@
                     {
                         try
                         {
-                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
+                            this.handle = this.connection.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc));
                         }
 #pragma warning disable CA1031 // Do not catch general exception types
                         catch (Exception e)
@@ -299,9 +299,9 @@
                     {
                         try
                         {
-                            var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                            var tcAdsSymbol = this.connection.ReadSymbolInfo(this.Symbol.Name);
                             var size = tcAdsSymbol.Size;
-                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                            this.handle = this.connection.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
                         }
 #pragma warning disable CA1031 // Do not catch general exception types
                         catch (Exception e)
@@ -315,9 +315,9 @@
                     {
                         try
                         {
-                            var tcAdsSymbol = this.client.ReadSymbolInfo(this.Symbol.Name);
+                            var tcAdsSymbol = this.connection.ReadSymbolInfo(this.Symbol.Name);
                             var size = tcAdsSymbol.Size / Marshal.SizeOf(elementType);
-                            this.handle = this.client.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
+                            this.handle = this.connection.AddDeviceNotificationEx(this.Symbol.Name, this.TransMode, this.CycleTime.Milliseconds, this.MaxDelay.Milliseconds, null, typeof(TPlc), new[] { size });
                         }
 #pragma warning disable CA1031 // Do not catch general exception types
                         catch (Exception e)
@@ -337,7 +337,7 @@
                     {
                         try
                         {
-                            _ = this.client.TryDeleteDeviceNotification((uint)this.handle);
+                            _ = this.connection.TryDeleteDeviceNotification((uint)this.handle);
                         }
 #pragma warning disable CA1031 // Do not catch general exception types
                         catch (Exception e)
@@ -372,16 +372,16 @@
 
         private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
-            Debug.WriteLine($"OnConnectionStateChanged before UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            Debug.WriteLine($"OnConnectionStateChanged before UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
             this.UpdateSubscription();
-            Debug.WriteLine($"OnConnectionStateChanged after UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            Debug.WriteLine($"OnConnectionStateChanged after UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
         }
 
         private void OnAdsStateChanged(object sender, AdsStateChangedEventArgs e)
         {
-            Debug.WriteLine($"OnAdsStateChanged before UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            Debug.WriteLine($"OnAdsStateChanged before UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
             this.UpdateSubscription();
-            Debug.WriteLine($"OnAdsStateChanged after UpdateSubscription IsConnected: {this.client.IsConnected}, AdsState: {((AdsClient)this.client).AdsState}, handle: {this.handle}");
+            Debug.WriteLine($"OnAdsStateChanged after UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
