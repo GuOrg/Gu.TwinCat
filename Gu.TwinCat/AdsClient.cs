@@ -14,8 +14,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClient"/> class.
         /// </summary>
-        /// <param name="settings">The <see cref="AdsClientAutoReconnectSettings"/>.</param>
-        public AdsClient(AdsClientAutoReconnectSettings settings)
+        /// <param name="settings">The <see cref="AutoReconnectSettings"/>.</param>
+        public AdsClient(AutoReconnectSettings settings)
         {
             this.AmsRouterNotification += (_, e) =>
             {
@@ -34,9 +34,9 @@
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// The <see cref="AdsClientAutoReconnectSettings"/>.
+        /// The <see cref="AutoReconnectSettings"/>.
         /// </summary>
-        public AdsClientAutoReconnectSettings Settings { get; }
+        public AutoReconnectSettings Settings { get; }
 
         /// <summary>
         /// The current <see cref="AdsState"/>.

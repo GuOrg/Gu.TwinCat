@@ -1,6 +1,5 @@
 ﻿namespace Gu.TwinCat.Tests
 {
-    using System;
     using NUnit.Framework;
     using TwinCAT.Ads;
 
@@ -10,7 +9,11 @@
         [Test]
         public static void Read()
         {
-            using var client = new AdsClient(new AdsClientAutoReconnectSettings(new AmsAddress("1.2.3.4.5.6", 851), AdsTimeSpan.FromSeconds(1), InactiveSymbolHandling.Throw));
+            using var client = new AdsClient(
+                new AutoReconnectSettings(
+                    address: new AmsAddress("1.2.3.4.5.6", 851),
+                    reconnectInterval: AdsTimeSpan.FromSeconds(1),
+                    inactiveSymbolHandling: InactiveSymbolHandling.Throw));
             var value = client.Read(SymbolFactory.ReadInt32("Plc.Name"));
         }
     }

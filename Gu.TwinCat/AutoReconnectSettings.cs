@@ -5,17 +5,17 @@
     using TwinCAT.Ads;
 
     /// <summary>
-    /// For creating a clinet that reconnects automatically.
+    /// For creating a client that reconnects automatically.
     /// </summary>
-    public class AdsClientAutoReconnectSettings : AdsClientSettings
+    public class AutoReconnectSettings : AdsClientSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AdsClientAutoReconnectSettings"/> class.
+        /// Initializes a new instance of the <see cref="AutoReconnectSettings"/> class.
         /// </summary>
         /// <param name="address">The <see cref="AmsAddress"/>.</param>
         /// <param name="reconnectInterval">The time between checks and attempts to reconnect.</param>
         /// <param name="inactiveSymbolHandling">The <see cref="TwinCat.InactiveSymbolHandling"/>.</param>
-        public AdsClientAutoReconnectSettings(AmsAddress? address, AdsTimeSpan reconnectInterval, InactiveSymbolHandling inactiveSymbolHandling)
+        public AutoReconnectSettings(AmsAddress? address, AdsTimeSpan reconnectInterval, InactiveSymbolHandling inactiveSymbolHandling)
              : base(address, inactiveSymbolHandling)
         {
             this.ReconnectInterval = reconnectInterval;
@@ -44,11 +44,11 @@
         private sealed class Listener : IDisposable
         {
             private readonly AdsClient client;
-            private readonly AdsClientAutoReconnectSettings settings;
+            private readonly AutoReconnectSettings settings;
             private readonly Timer reconnectTimer;
             private bool disposed;
 
-            internal Listener(AdsClient client, AdsClientAutoReconnectSettings settings)
+            internal Listener(AdsClient client, AutoReconnectSettings settings)
             {
                 this.client = client;
                 this.settings = settings;

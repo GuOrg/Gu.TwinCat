@@ -21,7 +21,7 @@
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public AdsClient AdsClient { get; } = new AdsClient(new AdsClientAutoReconnectSettings(null, AdsTimeSpan.FromSeconds(2), InactiveSymbolHandling.Throw));
+        public AdsClient AdsClient { get; } = new AdsClient(new AutoReconnectSettings(null, AdsTimeSpan.FromSeconds(2), InactiveSymbolHandling.Throw));
 
         public ICommand ConnectCommand { get; }
 
