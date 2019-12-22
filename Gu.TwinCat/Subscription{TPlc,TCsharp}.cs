@@ -372,16 +372,12 @@
 
         private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
-            Debug.WriteLine($"OnConnectionStateChanged before UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
             this.UpdateSubscription();
-            Debug.WriteLine($"OnConnectionStateChanged after UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
         }
 
         private void OnAdsStateChanged(object sender, AdsStateChangedEventArgs e)
         {
-            Debug.WriteLine($"OnAdsStateChanged before UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
             this.UpdateSubscription();
-            Debug.WriteLine($"OnAdsStateChanged after UpdateSubscription IsConnected: {this.connection.IsConnected}, AdsState: {((AdsClient)this.connection).AdsState}, handle: {this.handle}");
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
