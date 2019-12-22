@@ -10,12 +10,12 @@
         /// <summary>
         /// Gets the current state of the local AMS Router.
         /// </summary>
-        public AmsRouterState RouterState { get; }
+        AmsRouterState RouterState { get; }
 
         /// <summary>
         /// The current <see cref="AdsState"/>.
         /// </summary>
-        public AdsState AdsState { get; }
+        AdsState AdsState { get; }
 
         /// <summary>Establishes a connection to a ADS device.</summary>
         /// <param name="netId">NetId of the ADS server.</param>
@@ -36,11 +36,11 @@
         /// Reads the value of a symbol and returns the value as object. The parameter type must have the same
         /// layout as the ADS symbol.
         /// </summary>
-        /// <typeparam name="TCsharp">The c# type.</typeparam>
         /// <typeparam name="TPlc">The PLC type.</typeparam>
-        /// <param name="symbol">The <see cref="WriteToAdsSymbol{TCsharp,TPlc}"/>.</param>
+        /// <typeparam name="TCsharp">The c# type.</typeparam>
+        /// <param name="symbol">The <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
         /// <param name="value">The value.</param>
-        void Write<TCsharp, TPlc>(WriteToAdsSymbol<TCsharp, TPlc> symbol, TCsharp value);
+        void Write<TPlc, TCsharp>(WriteToAdsSymbol<TPlc, TCsharp> symbol, TCsharp value);
 
         /// <summary>
         /// Creates a new instance of the <see cref="Subscription{TPlc, TCsharp}"/> class.

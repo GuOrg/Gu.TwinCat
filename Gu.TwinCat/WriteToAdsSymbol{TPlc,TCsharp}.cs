@@ -5,9 +5,9 @@
     /// <summary>
     /// A symbol for writing to the PLC.
     /// </summary>
-    /// <typeparam name="TCsharp">The c# type.</typeparam>
     /// <typeparam name="TPlc">The PLC type.</typeparam>
-    public readonly struct WriteToAdsSymbol<TCsharp, TPlc> : IEquatable<WriteToAdsSymbol<TCsharp, TPlc>>
+    /// <typeparam name="TCsharp">The c# type.</typeparam>
+    public readonly struct WriteToAdsSymbol<TPlc, TCsharp> : IEquatable<WriteToAdsSymbol<TPlc, TCsharp>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/> struct.
@@ -40,25 +40,25 @@
         public bool IsActive { get; }
 
         /// <summary>Check if <paramref name="left"/> is equal to <paramref name="right"/>.</summary>
-        /// <param name="left">The left <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/>.</param>
-        /// <param name="right">The right <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/>.</param>
+        /// <param name="left">The left <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
+        /// <param name="right">The right <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
         /// <returns>True if <paramref name="left"/> is equal to <paramref name="right"/>.</returns>
-        public static bool operator ==(WriteToAdsSymbol<TCsharp, TPlc> left, WriteToAdsSymbol<TCsharp, TPlc> right)
+        public static bool operator ==(WriteToAdsSymbol<TPlc, TCsharp> left, WriteToAdsSymbol<TPlc, TCsharp> right)
         {
             return left.Equals(right);
         }
 
         /// <summary>Check if <paramref name="left"/> is not equal to <paramref name="right"/>.</summary>
-        /// <param name="left">The left <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/>.</param>
-        /// <param name="right">The right <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/>.</param>
+        /// <param name="left">The left <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
+        /// <param name="right">The right <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
         /// <returns>True if <paramref name="left"/> is not equal to <paramref name="right"/>.</returns>
-        public static bool operator !=(WriteToAdsSymbol<TCsharp, TPlc> left, WriteToAdsSymbol<TCsharp, TPlc> right)
+        public static bool operator !=(WriteToAdsSymbol<TPlc, TCsharp> left, WriteToAdsSymbol<TPlc, TCsharp> right)
         {
             return !left.Equals(right);
         }
 
         /// <inheritdoc />
-        public bool Equals(WriteToAdsSymbol<TCsharp, TPlc> other)
+        public bool Equals(WriteToAdsSymbol<TPlc, TCsharp> other)
         {
             return this.Name == other.Name;
         }
@@ -66,7 +66,7 @@
         /// <inheritdoc />
         public override bool Equals(object? obj)
         {
-            return obj is WriteToAdsSymbol<TCsharp, TPlc> other && this.Equals(other);
+            return obj is WriteToAdsSymbol<TPlc, TCsharp> other && this.Equals(other);
         }
 
         /// <inheritdoc/>

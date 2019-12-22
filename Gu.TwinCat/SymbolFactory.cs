@@ -55,18 +55,18 @@
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/> struct.
+        /// Creates a new instance of the <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/> struct.
         /// </summary>
-        /// <typeparam name="TCsharp">The c# type.</typeparam>
         /// <typeparam name="TPlc">The PLC type.</typeparam>
+        /// <typeparam name="TCsharp">The c# type.</typeparam>
         /// <param name="name">The symbol name.</param>
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
-        /// <returns>A new instance of the <see cref="WriteToAdsSymbol{TCsharp, TPlc}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, TPlc> WriteStruct<TCsharp, TPlc>(string name, Func<TCsharp, TPlc> map, bool isActive = true)
+        /// <returns>A new instance of the <see cref="WriteToAdsSymbol{TPlc, TCsharp}"/> struct.</returns>
+        public static WriteToAdsSymbol<TPlc, TCsharp> WriteStruct<TPlc, TCsharp>(string name, Func<TCsharp, TPlc> map, bool isActive = true)
             where TPlc : struct
         {
-            return new WriteToAdsSymbol<TCsharp, TPlc>(name, map, isActive);
+            return new WriteToAdsSymbol<TPlc, TCsharp>(name, map, isActive);
         }
     }
 }

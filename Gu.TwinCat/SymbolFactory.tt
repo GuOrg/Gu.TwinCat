@@ -81,9 +81,9 @@ namespace Gu.TwinCat
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, <#= type #>}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, <#= type #>> Write<#= type #><TCsharp>(string name, Func<TCsharp, <#= type #>> map, bool isActive = true)
+        public static WriteToAdsSymbol<<#= type #>, TCsharp> Write<#= type #><TCsharp>(string name, Func<TCsharp, <#= type #>> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,<#= type #>>(name, map, isActive);
+            return new WriteToAdsSymbol<<#= type #>, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace Gu.TwinCat
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, <#= type #>[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, <#= type #>[]> Write<#= type #>Array<TCsharp>(string name, Func<TCsharp, <#= type #>[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<<#= type #>[], TCsharp> Write<#= type #>Array<TCsharp>(string name, Func<TCsharp, <#= type #>[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, <#= type #>[]>(name, map, isActive);
+            return new WriteToAdsSymbol<<#= type #>[], TCsharp>(name, map, isActive);
         }
 <#
         if (type != "String")

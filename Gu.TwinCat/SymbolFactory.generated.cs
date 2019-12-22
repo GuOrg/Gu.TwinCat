@@ -74,9 +74,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Boolean}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Boolean> WriteBoolean<TCsharp>(string name, Func<TCsharp, Boolean> map, bool isActive = true)
+        public static WriteToAdsSymbol<Boolean, TCsharp> WriteBoolean<TCsharp>(string name, Func<TCsharp, Boolean> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Boolean>(name, map, isActive);
+            return new WriteToAdsSymbol<Boolean, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -98,9 +98,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Boolean[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Boolean[]> WriteBooleanArray<TCsharp>(string name, Func<TCsharp, Boolean[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Boolean[], TCsharp> WriteBooleanArray<TCsharp>(string name, Func<TCsharp, Boolean[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Boolean[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Boolean[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -170,9 +170,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Byte}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Byte> WriteByte<TCsharp>(string name, Func<TCsharp, Byte> map, bool isActive = true)
+        public static WriteToAdsSymbol<Byte, TCsharp> WriteByte<TCsharp>(string name, Func<TCsharp, Byte> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Byte>(name, map, isActive);
+            return new WriteToAdsSymbol<Byte, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -194,9 +194,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Byte[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Byte[]> WriteByteArray<TCsharp>(string name, Func<TCsharp, Byte[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Byte[], TCsharp> WriteByteArray<TCsharp>(string name, Func<TCsharp, Byte[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Byte[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Byte[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -266,9 +266,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Char}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Char> WriteChar<TCsharp>(string name, Func<TCsharp, Char> map, bool isActive = true)
+        public static WriteToAdsSymbol<Char, TCsharp> WriteChar<TCsharp>(string name, Func<TCsharp, Char> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Char>(name, map, isActive);
+            return new WriteToAdsSymbol<Char, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -290,9 +290,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Char[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Char[]> WriteCharArray<TCsharp>(string name, Func<TCsharp, Char[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Char[], TCsharp> WriteCharArray<TCsharp>(string name, Func<TCsharp, Char[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Char[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Char[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -362,9 +362,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Double}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Double> WriteDouble<TCsharp>(string name, Func<TCsharp, Double> map, bool isActive = true)
+        public static WriteToAdsSymbol<Double, TCsharp> WriteDouble<TCsharp>(string name, Func<TCsharp, Double> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Double>(name, map, isActive);
+            return new WriteToAdsSymbol<Double, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -386,9 +386,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Double[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Double[]> WriteDoubleArray<TCsharp>(string name, Func<TCsharp, Double[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Double[], TCsharp> WriteDoubleArray<TCsharp>(string name, Func<TCsharp, Double[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Double[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Double[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -458,9 +458,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int16}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int16> WriteInt16<TCsharp>(string name, Func<TCsharp, Int16> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int16, TCsharp> WriteInt16<TCsharp>(string name, Func<TCsharp, Int16> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Int16>(name, map, isActive);
+            return new WriteToAdsSymbol<Int16, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -482,9 +482,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int16[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int16[]> WriteInt16Array<TCsharp>(string name, Func<TCsharp, Int16[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int16[], TCsharp> WriteInt16Array<TCsharp>(string name, Func<TCsharp, Int16[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Int16[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Int16[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -554,9 +554,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int32}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int32> WriteInt32<TCsharp>(string name, Func<TCsharp, Int32> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int32, TCsharp> WriteInt32<TCsharp>(string name, Func<TCsharp, Int32> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Int32>(name, map, isActive);
+            return new WriteToAdsSymbol<Int32, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -578,9 +578,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int32[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int32[]> WriteInt32Array<TCsharp>(string name, Func<TCsharp, Int32[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int32[], TCsharp> WriteInt32Array<TCsharp>(string name, Func<TCsharp, Int32[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Int32[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Int32[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -650,9 +650,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int64}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int64> WriteInt64<TCsharp>(string name, Func<TCsharp, Int64> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int64, TCsharp> WriteInt64<TCsharp>(string name, Func<TCsharp, Int64> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Int64>(name, map, isActive);
+            return new WriteToAdsSymbol<Int64, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -674,9 +674,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Int64[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Int64[]> WriteInt64Array<TCsharp>(string name, Func<TCsharp, Int64[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Int64[], TCsharp> WriteInt64Array<TCsharp>(string name, Func<TCsharp, Int64[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Int64[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Int64[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -746,9 +746,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, SByte}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, SByte> WriteSByte<TCsharp>(string name, Func<TCsharp, SByte> map, bool isActive = true)
+        public static WriteToAdsSymbol<SByte, TCsharp> WriteSByte<TCsharp>(string name, Func<TCsharp, SByte> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,SByte>(name, map, isActive);
+            return new WriteToAdsSymbol<SByte, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -770,9 +770,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, SByte[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, SByte[]> WriteSByteArray<TCsharp>(string name, Func<TCsharp, SByte[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<SByte[], TCsharp> WriteSByteArray<TCsharp>(string name, Func<TCsharp, SByte[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, SByte[]>(name, map, isActive);
+            return new WriteToAdsSymbol<SByte[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -842,9 +842,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Single}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Single> WriteSingle<TCsharp>(string name, Func<TCsharp, Single> map, bool isActive = true)
+        public static WriteToAdsSymbol<Single, TCsharp> WriteSingle<TCsharp>(string name, Func<TCsharp, Single> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,Single>(name, map, isActive);
+            return new WriteToAdsSymbol<Single, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -866,9 +866,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, Single[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, Single[]> WriteSingleArray<TCsharp>(string name, Func<TCsharp, Single[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<Single[], TCsharp> WriteSingleArray<TCsharp>(string name, Func<TCsharp, Single[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, Single[]>(name, map, isActive);
+            return new WriteToAdsSymbol<Single[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -938,9 +938,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt16}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt16> WriteUInt16<TCsharp>(string name, Func<TCsharp, UInt16> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt16, TCsharp> WriteUInt16<TCsharp>(string name, Func<TCsharp, UInt16> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,UInt16>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt16, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -962,9 +962,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt16[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt16[]> WriteUInt16Array<TCsharp>(string name, Func<TCsharp, UInt16[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt16[], TCsharp> WriteUInt16Array<TCsharp>(string name, Func<TCsharp, UInt16[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, UInt16[]>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt16[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1034,9 +1034,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt32}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt32> WriteUInt32<TCsharp>(string name, Func<TCsharp, UInt32> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt32, TCsharp> WriteUInt32<TCsharp>(string name, Func<TCsharp, UInt32> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,UInt32>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt32, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1058,9 +1058,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt32[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt32[]> WriteUInt32Array<TCsharp>(string name, Func<TCsharp, UInt32[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt32[], TCsharp> WriteUInt32Array<TCsharp>(string name, Func<TCsharp, UInt32[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, UInt32[]>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt32[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1130,9 +1130,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt64}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt64> WriteUInt64<TCsharp>(string name, Func<TCsharp, UInt64> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt64, TCsharp> WriteUInt64<TCsharp>(string name, Func<TCsharp, UInt64> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,UInt64>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt64, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1154,9 +1154,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, UInt64[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, UInt64[]> WriteUInt64Array<TCsharp>(string name, Func<TCsharp, UInt64[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<UInt64[], TCsharp> WriteUInt64Array<TCsharp>(string name, Func<TCsharp, UInt64[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, UInt64[]>(name, map, isActive);
+            return new WriteToAdsSymbol<UInt64[], TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1226,9 +1226,9 @@
         /// <param name="map">The mapping ex x => x.Millimetres.</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, String}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, String> WriteString<TCsharp>(string name, Func<TCsharp, String> map, bool isActive = true)
+        public static WriteToAdsSymbol<String, TCsharp> WriteString<TCsharp>(string name, Func<TCsharp, String> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp,String>(name, map, isActive);
+            return new WriteToAdsSymbol<String, TCsharp>(name, map, isActive);
         }
 
         /// <summary>
@@ -1250,9 +1250,9 @@
         /// <param name="map">The mapping ex x => x.ToArray().</param>
         /// <param name="isActive">Specifies if the symbol is currently active.</param>
         /// <returns>A new instance of the <see cref="T:WriteToAdsSymbol{TCsharp, String[]}"/> struct.</returns>
-        public static WriteToAdsSymbol<TCsharp, String[]> WriteStringArray<TCsharp>(string name, Func<TCsharp, String[]> map, bool isActive = true)
+        public static WriteToAdsSymbol<String[], TCsharp> WriteStringArray<TCsharp>(string name, Func<TCsharp, String[]> map, bool isActive = true)
         {
-            return new WriteToAdsSymbol<TCsharp, String[]>(name, map, isActive);
+            return new WriteToAdsSymbol<String[], TCsharp>(name, map, isActive);
         }
     }
 }

@@ -70,11 +70,11 @@
         /// <summary>
         /// Writes the value of a symbol.
         /// </summary>
-        /// <typeparam name="TCsharp">The c# type.</typeparam>
         /// <typeparam name="TPlc">The PLC type.</typeparam>
-        /// <param name="symbol">The <see cref="WriteToAdsSymbol{TCsharp,TPlc}"/>.</param>
+        /// <typeparam name="TCsharp">The c# type.</typeparam>
+        /// <param name="symbol">The <see cref="WriteToAdsSymbol{TPlc,TCsharp}"/>.</param>
         /// <param name="value">The value.</param>
-        public void Write<TCsharp, TPlc>(WriteToAdsSymbol<TCsharp, TPlc> symbol, TCsharp value)
+        public void Write<TPlc, TCsharp>(WriteToAdsSymbol<TPlc, TCsharp> symbol, TCsharp value)
         {
             if (symbol.IsActive)
             {
