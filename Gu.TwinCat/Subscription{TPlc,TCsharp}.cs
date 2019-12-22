@@ -21,9 +21,9 @@
         private int handle = -1;
         private Maybe<TCsharp> value;
         private DateTimeOffset lastUpdateTime;
-        private TimeSpan lastNotifyTime;
+        private TimeSpan lastNotifyDuration;
         private UpdateTrigger lastTrigger;
-        private Exception? exception;
+        private Exception? lastException;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subscription{TPlc, TCsharp}"/> class.
@@ -127,17 +127,17 @@
         /// The time the event handler for <see cref="Value"/> and <see cref="LastUpdateTime"/> took.
         /// Mostly for debug purposes.
         /// </summary>
-        public TimeSpan LastNotifyTime
+        public TimeSpan LastNotifyDuration
         {
-            get => this.lastNotifyTime;
+            get => this.lastNotifyDuration;
             set
             {
-                if (value == this.lastNotifyTime)
+                if (value == this.lastNotifyDuration)
                 {
                     return;
                 }
 
-                this.lastNotifyTime = value;
+                this.lastNotifyDuration = value;
                 this.OnPropertyChanged();
             }
         }
@@ -161,19 +161,19 @@
         }
 
         /// <summary>
-        /// The last <see cref="Exception"/>.
+        /// The last <see cref="LastException"/>.
         /// </summary>
-        public Exception? Exception
+        public Exception? LastException
         {
-            get => this.exception;
+            get => this.lastException;
             set
             {
-                if (ReferenceEquals(value, this.exception))
+                if (ReferenceEquals(value, this.lastException))
                 {
                     return;
                 }
 
-                this.exception = value;
+                this.lastException = value;
                 this.OnPropertyChanged();
             }
         }
@@ -204,7 +204,7 @@
                             catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
                             {
-                                this.Exception = e;
+                                this.LastException = e;
                             }
                         }
                     }
@@ -237,7 +237,7 @@
                 catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
-                    this.Exception = ex;
+                    this.LastException = ex;
                 }
             }
             else
@@ -253,14 +253,14 @@
                 var time = DateTimeOffset.UtcNow;
                 this.Value = newValue;
                 this.LastUpdateTime = time;
-                this.LastNotifyTime = DateTimeOffset.UtcNow - time;
+                this.LastNotifyDuration = DateTimeOffset.UtcNow - time;
                 this.LastTrigger = trigger;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
-                this.Exception = e;
+                this.LastException = e;
             }
         }
 
@@ -292,7 +292,7 @@
                         catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
                         {
-                            this.Exception = e;
+                            this.LastException = e;
                         }
                     }
                     else if (typeof(TPlc) == typeof(string))
@@ -307,7 +307,7 @@
                         catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
                         {
-                            this.Exception = e;
+                            this.LastException = e;
                         }
                     }
                     else if (typeof(TPlc) is { IsArray: true, HasElementType: true } arrayType &&
@@ -323,7 +323,7 @@
                         catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
                         {
-                            this.Exception = e;
+                            this.LastException = e;
                         }
                     }
                     else
@@ -343,7 +343,7 @@
                         catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
                         {
-                            this.Exception = e;
+                            this.LastException = e;
                         }
                     }
 
@@ -365,7 +365,7 @@
                 catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
-                    this.Exception = ex;
+                    this.LastException = ex;
                 }
             }
         }
