@@ -1,5 +1,5 @@
 # Gu.TwinCat
-For communication with BeckHoff TwinCAT PLC
+For communication with Beckhoff TwinCAT PLC
 
 ## Sample
 
