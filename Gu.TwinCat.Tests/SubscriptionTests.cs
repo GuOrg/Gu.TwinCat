@@ -9,7 +9,7 @@
     public static class SubscriptionTests
     {
         [Test]
-        public static void Create()
+        public static void CreateInt32()
         {
             var adsConnection = new Mock<IAdsConnection>(MockBehavior.Strict);
             adsConnection.SetupGet(x => x.IsConnected).Returns(true);
@@ -26,6 +26,48 @@
             Assert.AreEqual(null, subscription.LastException);
             Assert.AreEqual(true, subscription.Value.HasValue);
             Assert.AreEqual(2, subscription.Value.Value);
+        }
+
+        [Test]
+        public static void CreateString()
+        {
+            var adsConnection = new Mock<IAdsConnection>(MockBehavior.Strict);
+            adsConnection.SetupGet(x => x.IsConnected).Returns(true);
+            var state = new StateInfo(AdsState.Run, 0);
+            adsConnection.Setup(x => x.TryReadState(out state)).Returns(AdsErrorCode.NoError);
+            var symbol = SymbolFactory.ReadString("Plc.Name");
+            adsConnection.Setup(x => x.AddDeviceNotificationEx(symbol.Name, AdsTransMode.OnChange, 100, 2000, null, typeof(string), new[] { 30 })).Returns(1);
+            adsConnection.Setup(x => x.ReadSymbolInfo(symbol.Name)).Returns(Mock.Of<ITcAdsSymbol>(x => x.Size == 30));
+            using var subscription = new Subscription<string, string>(adsConnection.Object, symbol, AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100), AdsTimeSpan.FromSeconds(2));
+            Assert.AreEqual(null, subscription.LastException);
+            Assert.AreEqual(false, subscription.Value.HasValue);
+            Assert.AreEqual(Maybe.None<string>(), subscription.Value);
+
+            adsConnection.Raise(x => x.AdsNotificationEx += null, new AdsNotificationExEventArgs(0, null, 1, "abc"));
+            Assert.AreEqual(null, subscription.LastException);
+            Assert.AreEqual(true, subscription.Value.HasValue);
+            Assert.AreEqual("abc", subscription.Value.Value);
+        }
+
+        [Test]
+        public static void CreateFloatArray()
+        {
+            var adsConnection = new Mock<IAdsConnection>(MockBehavior.Strict);
+            adsConnection.SetupGet(x => x.IsConnected).Returns(true);
+            var state = new StateInfo(AdsState.Run, 0);
+            adsConnection.Setup(x => x.TryReadState(out state)).Returns(AdsErrorCode.NoError);
+            var symbol = SymbolFactory.ReadSingleArray("Plc.Name");
+            adsConnection.Setup(x => x.AddDeviceNotificationEx(symbol.Name, AdsTransMode.OnChange, 100, 2000, null, typeof(float[]), new[] { 3 })).Returns(1);
+            adsConnection.Setup(x => x.ReadSymbolInfo(symbol.Name)).Returns(Mock.Of<ITcAdsSymbol>(x => x.Size == 12));
+            using var subscription = new Subscription<float[], float[]>(adsConnection.Object, symbol, AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100), AdsTimeSpan.FromSeconds(2));
+            Assert.AreEqual(null, subscription.LastException);
+            Assert.AreEqual(false, subscription.Value.HasValue);
+            Assert.AreEqual(Maybe.None<float[]>(), subscription.Value);
+
+            adsConnection.Raise(x => x.AdsNotificationEx += null, new AdsNotificationExEventArgs(0, null, 1, new float[] { 1, 2, 3 }));
+            Assert.AreEqual(null, subscription.LastException);
+            Assert.AreEqual(true, subscription.Value.HasValue);
+            Assert.AreEqual(new float[] { 1, 2, 3 }, subscription.Value.Value);
         }
 
         [Test]
