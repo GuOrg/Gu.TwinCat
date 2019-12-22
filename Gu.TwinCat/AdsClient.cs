@@ -106,6 +106,12 @@
         /// <returns>A new instance of the <see cref="Subscription{Single, TCsharp}"/> class.</returns>
         public Subscription<TPlc, TCsharp> Subscribe<TPlc, TCsharp>(ReadFromAdsSymbol<TPlc, TCsharp> symbol, AdsTransMode transMode, AdsTimeSpan cycleTime, AdsTimeSpan maxDelay = default)
         {
+            if (!symbol.IsActive &&
+                this.Settings.InactiveSymbolHandling == InactiveSymbolHandling.Throw)
+            {
+                throw new InvalidOperationException("Subscribing to inactive symbol is not allowed.");
+            }
+
             return new Subscription<TPlc, TCsharp>(this, symbol, transMode, cycleTime, maxDelay);
         }
 
