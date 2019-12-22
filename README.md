@@ -10,7 +10,7 @@ public sealed class Plc : IDisposable
     private readonly ReadFromAdsSymbol<int, int> value3 = SymbolFactory.ReadInt32("Plc.Value3");
     private readonly ReadFromAdsSymbol<float, Angle> value4 = SymbolFactory.ReadSingle("Plc.Value4", x => Angle.FromDegrees(x));
     private readonly WriteToAdsSymbol<int, int> value5 = SymbolFactory.WriteInt32("Plc.Value5");
-    private readonly WriteToAdsSymbol<Angle, float> value6 = SymbolFactory.WriteSingle<Angle>("Plc.Value6", x => x.Degrees);
+    private readonly WriteToAdsSymbol<float, Angle> value6 = SymbolFactory.WriteSingle<Angle>("Plc.Value6", x => x.Degrees);
 
     public Plc()
     {
