@@ -64,7 +64,9 @@
         /// Get the value or default.
         /// </summary>
         /// <returns>The value or default.</returns>
+#pragma warning disable CA1024 // Use properties where appropriate
         public T? GetValueOrDefault() => this.HasValue ? this.value : default;
+#pragma warning restore CA1024 // Use properties where appropriate
 
         /// <inheritdoc />
         public bool Equals(Maybe<T> other)

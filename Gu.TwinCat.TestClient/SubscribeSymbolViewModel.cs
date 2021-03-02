@@ -75,6 +75,7 @@
 
         public void Subscribe(AdsClient client)
         {
+            (this.subscription as IDisposable)?.Dispose();
             this.Subscription = this.Type switch
             {
                 { IsArray: true } => Type.GetTypeCode(this.Type.GetElementType()) switch
