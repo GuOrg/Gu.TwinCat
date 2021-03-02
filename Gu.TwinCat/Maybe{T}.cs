@@ -64,7 +64,7 @@
         /// Get the value or default.
         /// </summary>
         /// <returns>The value or default.</returns>
-        public T GetValueOrDefault() => this.HasValue ? this.value : default;
+        public T? GetValueOrDefault() => this.HasValue ? this.value : default;
 
         /// <inheritdoc />
         public bool Equals(Maybe<T> other)

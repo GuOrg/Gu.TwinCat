@@ -74,7 +74,7 @@
                     {
                         this.client.Connect(address);
                     }
-                    else if (this.settings.Adress is { } settingsAddress)
+                    else if (this.settings.Address is { } settingsAddress)
                     {
                         this.client.Connect(settingsAddress);
                     }

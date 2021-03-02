@@ -16,7 +16,7 @@
                     inactiveSymbolHandling: InactiveSymbolHandling.Throw));
 
             var exception = Assert.Throws<InvalidOperationException>(() => client.Read(SymbolFactory.ReadInt32("Plc.ReadOnly", isActive: false)));
-            Assert.AreEqual("Reading inactive symbol is not allowed.", exception.Message);
+            Assert.AreEqual("Reading inactive symbol is not allowed.", exception!.Message);
         }
 
         [Test]
@@ -41,7 +41,7 @@
                     inactiveSymbolHandling: InactiveSymbolHandling.Throw));
 
             var exception = Assert.Throws<InvalidOperationException>(() => client.Write(SymbolFactory.WriteInt32("Plc.ReadOnly", isActive: false), 1));
-            Assert.AreEqual("Writing inactive symbol is not allowed.", exception.Message);
+            Assert.AreEqual("Writing inactive symbol is not allowed.", exception!.Message);
         }
 
         [Test]
@@ -66,7 +66,7 @@
                     inactiveSymbolHandling: InactiveSymbolHandling.Throw));
 
             var exception = Assert.Throws<InvalidOperationException>(() => client.Subscribe(SymbolFactory.ReadInt32("Plc.ReadOnly", isActive: false), AdsTransMode.OnChange, AdsTimeSpan.FromMilliseconds(100)));
-            Assert.AreEqual("Subscribing to inactive symbol is not allowed.", exception.Message);
+            Assert.AreEqual("Subscribing to inactive symbol is not allowed.", exception!.Message);
         }
 
         [Test]

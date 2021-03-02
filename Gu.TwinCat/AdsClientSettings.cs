@@ -12,23 +12,23 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdsClientSettings"/> class.
         /// </summary>
-        /// <param name="adress">The <see cref="AmsAddress"/>.</param>
+        /// <param name="address">The <see cref="AmsAddress"/>.</param>
         /// <param name="inactiveSymbolHandling">The <see cref="TwinCat.InactiveSymbolHandling"/>.</param>
-        public AdsClientSettings(AmsAddress? adress, InactiveSymbolHandling inactiveSymbolHandling)
+        protected AdsClientSettings(AmsAddress? address, InactiveSymbolHandling inactiveSymbolHandling)
         {
             if (!Enum.IsDefined(typeof(InactiveSymbolHandling), inactiveSymbolHandling))
             {
                 throw new InvalidEnumArgumentException(nameof(inactiveSymbolHandling), (int)inactiveSymbolHandling, typeof(InactiveSymbolHandling));
             }
 
-            this.Adress = adress;
+            this.Address = address;
             this.InactiveSymbolHandling = inactiveSymbolHandling;
         }
 
         /// <summary>
         /// The <see cref="AmsAddress"/>.
         /// </summary>
-        public AmsAddress? Adress { get; }
+        public AmsAddress? Address { get; }
 
         /// <summary>
         /// Specifies how this instance handles inactive symbols.
