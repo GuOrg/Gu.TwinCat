@@ -23,11 +23,18 @@
                 default(Listener),
                 (o, e) => (e.OldValue as IDisposable)?.Dispose()));
 
+        /// <summary>Helper for setting <see cref="CellEditModeProperty"/> on <paramref name="element"/>.</summary>
+        /// <param name="element"><see cref="DependencyObject"/> to set <see cref="CellEditModeProperty"/> on.</param>
+        /// <param name="value">CellEditMode property value.</param>
         public static void SetCellEditMode(DependencyObject element, bool value)
         {
             element.SetValue(CellEditModeProperty, value);
         }
 
+        /// <summary>Helper for getting <see cref="CellEditModeProperty"/> from <paramref name="element"/>.</summary>
+        /// <param name="element"><see cref="DependencyObject"/> to read <see cref="CellEditModeProperty"/> from.</param>
+        /// <returns>CellEditMode property value.</returns>
+        [AttachedPropertyBrowsableForType(typeof(DependencyObject))]
         public static bool GetCellEditMode(DependencyObject element)
         {
             return (bool)element.GetValue(CellEditModeProperty);

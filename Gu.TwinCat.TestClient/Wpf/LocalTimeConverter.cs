@@ -3,6 +3,8 @@
     using System;
     using System.Windows.Data;
 
+    [ValueConversion(typeof(DateTimeOffset), typeof(DateTime))]
+    [ValueConversion(typeof(DateTime), typeof(DateTime))]
     public sealed class LocalTimeConverter : IValueConverter
     {
         public static readonly LocalTimeConverter Default = new LocalTimeConverter();

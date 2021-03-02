@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Windows.Data;
 
+    [ValueConversion(typeof(object), typeof(string))]
     public sealed class ObjectToStringConverter : IValueConverter
     {
         public static readonly ObjectToStringConverter Default = new ObjectToStringConverter();

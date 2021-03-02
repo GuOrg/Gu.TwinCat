@@ -5,7 +5,8 @@
     using System.Linq;
     using System.Windows.Data;
 
-    public class MaybeToStringConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(string))]
+    public sealed class MaybeToStringConverter : IValueConverter
     {
         public static readonly MaybeToStringConverter Default = new MaybeToStringConverter();
 
