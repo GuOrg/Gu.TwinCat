@@ -3,7 +3,12 @@
     <TargetFramework>net461</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>Enable</Nullable>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -12,7 +17,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.1.0</Version>
     <Authors>Johan Larsson</Authors>
     <NeutralLanguage>en</NeutralLanguage>
@@ -20,6 +24,8 @@
     <PackageReleaseNotes>
       Initial
     </PackageReleaseNotes>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,14 +43,7 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 
-    <None Update="SymbolFactory.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SymbolFactory.generated.cs</LastGenOutput>
-    </None>
-    <Compile Update="SymbolFactory.generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SymbolFactory.tt</DependentUpon>
-    </Compile>
+    <None Update="SymbolFactory.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="SymbolFactory.generated.cs" />
+    <Compile Update="SymbolFactory.generated.cs" DesignTime="True" AutoGen="True" DependentUpon="SymbolFactory.tt" />
   </ItemGroup>
 </Project>

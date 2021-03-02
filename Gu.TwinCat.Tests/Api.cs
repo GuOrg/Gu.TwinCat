@@ -1,5 +1,4 @@
 ﻿#pragma warning disable CA1815 // Override equals and operator equals on value types
-#pragma warning disable CA1815 // Override equals and operator equals on value types
 #pragma warning disable SA1201 // Elements should appear in the correct order
 #pragma warning disable SA1649 // File name should match first type name
 namespace Gu.TwinCat.Tests
