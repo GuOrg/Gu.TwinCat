@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="6.0.249" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="6.0.273" />
     <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" Version="1.0.0-beta.59" PrivateAssets="all" />
     <PackageReference Include="Gu.Analyzers" Version="2.0.3" PrivateAssets="all" />
     <PackageReference Include="IDisposableAnalyzers" Version="4.0.6" PrivateAssets="all" />
