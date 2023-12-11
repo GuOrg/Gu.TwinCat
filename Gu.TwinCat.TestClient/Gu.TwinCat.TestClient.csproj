@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="6.1.125" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="6.1.154" />
     <PackageReference Include="Gu.Analyzers" Version="2.0.3" PrivateAssets="all" />
     <PackageReference Include="IDisposableAnalyzers" Version="4.0.7" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14" PrivateAssets="all" />
